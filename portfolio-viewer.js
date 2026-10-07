@@ -7,7 +7,6 @@ const sections = [
   { title: 'Fizzz', subtitle: 'AI 角色互动与创建', start: 3, end: 11 },
   { title: '互动故事创作工具', subtitle: '多分支故事创作', start: 12, end: 18 },
   { title: 'Echo', subtitle: '职场成长 AI 助手', start: 19, end: 20 },
-  { title: 'Thanks', subtitle: '致谢', start: 21, end: 21 },
 ];
 
 function showError() {
@@ -19,7 +18,7 @@ function showError() {
 function addViewerStyles(viewer) {
   const stylesheet = viewer.document.createElement('link');
   stylesheet.rel = 'stylesheet';
-  stylesheet.href = new URL('portfolio-viewer.css?v=2', location.href).href;
+  stylesheet.href = new URL('portfolio-viewer.css?v=3', location.href).href;
   viewer.document.head.append(stylesheet);
 }
 
@@ -34,8 +33,24 @@ function createSectionNavigation(viewer, app) {
 
   const heading = viewer.document.createElement('div');
   heading.className = 'portfolio-section-heading';
-  heading.innerHTML = '<span>项目目录</span><span id="portfolioSectionCurrent">简介</span>';
+  heading.innerHTML = `
+    <span class="portfolio-section-heading-label">项目目录</span>
+    <span class="portfolio-section-current" id="portfolioSectionCurrent">简介</span>
+    <button
+      class="portfolio-section-toggle"
+      id="portfolioSectionToggle"
+      type="button"
+      aria-controls="portfolioSectionList"
+      aria-expanded="true"
+      aria-label="收起项目目录"
+      title="收起项目目录"
+    ><span aria-hidden="true"></span></button>
+  `;
   nav.append(heading);
+
+  const sectionList = viewer.document.createElement('div');
+  sectionList.id = 'portfolioSectionList';
+  sectionList.className = 'portfolio-section-list';
 
   for (const section of sections) {
     const button = viewer.document.createElement('button');
@@ -52,19 +67,29 @@ function createSectionNavigation(viewer, app) {
       <span class="portfolio-section-pages">${section.start === section.end ? section.start : `${section.start}–${section.end}`}</span>
     `;
     button.addEventListener('click', () => app.pdfLinkService.goToPage(section.start));
-    nav.append(button);
+    sectionList.append(button);
   }
+
+  nav.append(sectionList);
+
+  const toggle = heading.querySelector('#portfolioSectionToggle');
+  toggle?.addEventListener('click', () => {
+    const collapsed = nav.classList.toggle('is-collapsed');
+    toggle.setAttribute('aria-expanded', String(!collapsed));
+    toggle.setAttribute('aria-label', collapsed ? '展开项目目录' : '收起项目目录');
+    toggle.title = collapsed ? '展开项目目录' : '收起项目目录';
+  });
 
   content.prepend(nav);
 
   const updateActiveSection = (pageNumber) => {
-    const active = sections.find(section => pageNumber >= section.start && pageNumber <= section.end) || sections[0];
+    const active = sections.find(section => pageNumber >= section.start && pageNumber <= section.end);
     nav.querySelectorAll('.portfolio-section-button').forEach((button) => {
-      const isActive = Number(button.dataset.start) === active.start;
+      const isActive = Boolean(active && Number(button.dataset.start) === active.start);
       button.toggleAttribute('aria-current', isActive);
     });
     const current = viewer.document.getElementById('portfolioSectionCurrent');
-    if (current) current.textContent = active.title;
+    if (current) current.textContent = active?.title || `第 ${pageNumber} 页`;
   };
 
   app.eventBus.on('pagechanging', ({ pageNumber }) => updateActiveSection(pageNumber));
@@ -76,12 +101,15 @@ function customizeToolbar(viewer, app) {
   viewerDocument.documentElement.classList.add('portfolio-customized');
   viewerDocument.title = '张新倩｜UX 作品集';
 
+  const printGroup = viewerDocument.getElementById('printButton')?.parentElement;
   const hiddenControls = [
     viewerDocument.getElementById('viewFindButton')?.parentElement,
     viewerDocument.getElementById('previous')?.parentElement,
     viewerDocument.getElementById('editorModeButtons'),
     viewerDocument.getElementById('editorModeSeparator'),
     viewerDocument.getElementById('secondaryToolbarToggle'),
+    printGroup,
+    printGroup?.nextElementSibling,
   ];
   hiddenControls.forEach(control => control?.classList.add('portfolio-control-hidden'));
 
@@ -116,11 +144,7 @@ function customizeToolbar(viewer, app) {
       } catch {}
     });
 
-    const print = viewerDocument.getElementById('printButton');
-    const download = viewerDocument.getElementById('downloadButton');
     actions.append(fullscreen);
-    if (print) actions.append(print);
-    if (download) actions.append(download);
     toolbarRight.prepend(actions);
 
     document.addEventListener('fullscreenchange', () => {

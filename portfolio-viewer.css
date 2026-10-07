@@ -66,7 +66,7 @@
   display: flex;
   padding: 12px 10px 10px;
   flex-direction: column;
-  gap: 4px;
+  gap: 0;
   border-block-end: 1px solid rgb(255 255 255 / 0.09);
   background:
     linear-gradient(180deg, rgb(255 255 255 / 0.035), transparent),
@@ -78,16 +78,76 @@
   display: flex;
   padding: 0 8px 7px;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 8px;
   color: rgb(255 255 255 / 0.42);
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.12em;
 }
 
-.portfolio-section-heading span:last-child {
+.portfolio-section-heading-label {
+  margin-inline-end: auto;
+}
+
+.portfolio-section-current {
+  overflow: hidden;
+  max-width: 92px;
   color: #23d5e5;
   letter-spacing: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.portfolio-section-toggle {
+  display: grid;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 0;
+  border-radius: 6px;
+  background: rgb(255 255 255 / 0.055);
+  color: rgb(255 255 255 / 0.62);
+  cursor: pointer;
+}
+
+.portfolio-section-toggle:hover {
+  background: rgb(255 255 255 / 0.1);
+  color: #fff;
+}
+
+.portfolio-section-toggle:focus-visible {
+  outline: 2px solid #23d5e5;
+  outline-offset: 1px;
+}
+
+.portfolio-section-toggle > span {
+  width: 7px;
+  height: 7px;
+  border-block-end: 1.5px solid currentColor;
+  border-inline-end: 1.5px solid currentColor;
+  transform: translateY(2px) rotate(225deg);
+  transition: transform 140ms ease;
+}
+
+.portfolio-section-nav.is-collapsed .portfolio-section-toggle > span {
+  transform: translateY(-2px) rotate(45deg);
+}
+
+.portfolio-section-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.portfolio-section-nav.is-collapsed {
+  padding-block-end: 5px;
+}
+
+.portfolio-section-nav.is-collapsed .portfolio-section-list {
+  display: none;
 }
 
 .portfolio-section-button {
@@ -190,6 +250,10 @@
 
 @media (prefers-reduced-motion: reduce) {
   .portfolio-section-button {
+    transition: none;
+  }
+
+  .portfolio-section-toggle > span {
     transition: none;
   }
 }
