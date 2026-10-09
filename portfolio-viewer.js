@@ -1,7 +1,9 @@
 const frame = document.getElementById('portfolio');
 const loading = document.getElementById('loading');
 const mobile = window.matchMedia('(max-width: 700px)');
-const pdfUrl = new URL('Zhang%20Xinqian%20portfolio.pdf?v=1646a52ed7cc', location.href);
+const isResume = document.body.dataset.document === 'resume';
+const documentLabel = isResume ? '简历' : '作品集';
+const pdfUrl = new URL(frame.dataset.pdf || 'Zhang%20Xinqian%20portfolio.pdf?v=1646a52ed7cc', location.href);
 const sections = [
   { title: '简介', subtitle: '封面 · 关于我', start: 1, end: 2 },
   { title: 'Fizzz', subtitle: 'AI 角色互动与创建', start: 3, end: 11 },
@@ -12,7 +14,7 @@ const sections = [
 function showError() {
   loading.hidden = false;
   document.getElementById('spinner').hidden = true;
-  document.getElementById('loading-message').textContent = '预览暂时无法加载，请直接打开 PDF 查看作品集。';
+  document.getElementById('loading-message').textContent = `预览暂时无法加载，请直接打开 PDF 查看${documentLabel}。`;
 }
 
 function addViewerStyles(viewer) {
@@ -99,7 +101,7 @@ function createSectionNavigation(viewer, app) {
 function customizeToolbar(viewer, app) {
   const viewerDocument = viewer.document;
   viewerDocument.documentElement.classList.add('portfolio-customized');
-  viewerDocument.title = '张新倩｜UX 作品集';
+  viewerDocument.title = `张新倩｜${documentLabel}`;
 
   const printGroup = viewerDocument.getElementById('printButton')?.parentElement;
   const hiddenControls = [
@@ -119,8 +121,8 @@ function customizeToolbar(viewer, app) {
     const brand = viewerDocument.createElement('div');
     brand.id = 'portfolioBrand';
     brand.className = 'portfolio-brand';
-    brand.setAttribute('aria-label', '张新倩 UX 作品集');
-    brand.innerHTML = '<strong>张新倩</strong><span>UX PORTFOLIO</span>';
+    brand.setAttribute('aria-label', `张新倩 ${documentLabel}`);
+    brand.innerHTML = `<strong>张新倩</strong><span>${isResume ? 'RESUME' : 'UX PORTFOLIO'}</span>`;
     const pageControls = pageNumber.closest('.loadingInput')?.parentElement;
     toolbarLeft.insertBefore(brand, pageControls || null);
   }
@@ -136,11 +138,11 @@ function customizeToolbar(viewer, app) {
     fullscreen.className = 'toolbarButton portfolio-fullscreen-button';
     fullscreen.type = 'button';
     fullscreen.title = '全屏查看';
-    fullscreen.setAttribute('aria-label', '全屏查看作品集');
+    fullscreen.setAttribute('aria-label', `全屏查看${documentLabel}`);
     fullscreen.addEventListener('click', async () => {
       try {
         if (document.fullscreenElement) await document.exitFullscreen();
-        else await frame.requestFullscreen();
+        else await document.documentElement.requestFullscreen();
       } catch {}
     });
 
@@ -151,13 +153,13 @@ function customizeToolbar(viewer, app) {
       const active = Boolean(document.fullscreenElement);
       fullscreen.classList.toggle('toggled', active);
       fullscreen.title = active ? '退出全屏' : '全屏查看';
-      fullscreen.setAttribute('aria-label', active ? '退出全屏' : '全屏查看作品集');
+      fullscreen.setAttribute('aria-label', active ? '退出全屏' : `全屏查看${documentLabel}`);
     });
   }
 
   const sidebarLabel = viewerDocument.getElementById('viewsManagerHeaderLabel');
   if (sidebarLabel) sidebarLabel.textContent = '页面导航';
-  createSectionNavigation(viewer, app);
+  if (!isResume) createSectionNavigation(viewer, app);
 }
 
 // Configure the official viewer before initialization; keep vendor files intact.
@@ -166,8 +168,8 @@ document.addEventListener('webviewerloaded', (event) => {
   const viewer = event.detail.source;
   viewer.PDFViewerApplicationOptions.setAll({
     disablePreferences: true,
-    defaultZoomValue: 'page-width',
-    sidebarViewOnLoad: mobile.matches ? 0 : 1,
+    defaultZoomValue: isResume && !mobile.matches ? 'page-fit' : 'page-width',
+    sidebarViewOnLoad: mobile.matches || isResume ? 0 : 1,
     viewOnLoad: 1,
     viewerCssTheme: 2,
     annotationEditorMode: -1,
@@ -187,9 +189,9 @@ document.addEventListener('webviewerloaded', (event) => {
       if (mobile.matches) app.viewsManager?.close();
     });
     mobile.addEventListener('change', ({ matches }) => {
-      if (matches) app.viewsManager?.close();
+      if (matches || isResume) app.viewsManager?.close();
       else app.viewsManager?.switchView(1, true);
-      app.pdfViewer.currentScaleValue = 'page-width';
+      app.pdfViewer.currentScaleValue = isResume && !matches ? 'page-fit' : 'page-width';
     });
   }).catch(showError);
 });

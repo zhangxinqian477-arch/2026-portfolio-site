@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>张新倩 - 个人简历</title>
+  <link rel="icon" href="homepage/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="reader-shell.css?v=1">
+  <script src="portfolio-viewer.js?v=4" defer></script>
+</head>
+<body data-document="resume">
+  <header class="reader-bar">
+    <a class="reader-back" href="./index.html" aria-label="返回首页"><span aria-hidden="true">←</span>返回首页</a>
+    <span class="reader-title">张新倩 · 简历</span>
+  </header>
+  <div class="loading" id="loading" role="status">
+    <div class="spinner" id="spinner" aria-hidden="true"></div>
+    <div id="loading-message">简历加载中，请稍候…</div>
+    <a href="resume.pdf?v=a75e65745cf1" target="_blank" rel="noopener">直接打开 PDF</a>
+  </div>
+  <iframe id="portfolio" title="张新倩简历" data-pdf="resume.pdf?v=a75e65745cf1" allow="fullscreen"></iframe>
+  <noscript><style>#spinner { display: none; }</style>请使用上方链接打开文档。</noscript>
+</body>
+</html>
