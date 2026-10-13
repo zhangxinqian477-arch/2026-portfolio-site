@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f8f6">
+  <meta name="description" content="张新倩的沿途记录：照片、城市观察与旅途中的小发现。">
+  <meta name="robots" content="noindex,nofollow">
+  <title>沿途记录 · Field Notes · 张新倩</title>
+  <link rel="icon" type="image/svg+xml" href="../homepage/assets/favicon.svg">
+  <link rel="preload" href="../homepage/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../homepage/assets/fonts/noto-sans-sc-page.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="wordmark" href="../" aria-label="张新倩 · 返回首页">
+        XINQIAN ZHANG <span class="wordmark-mark" aria-hidden="true">✳</span>
+      </a>
+      <a class="home-link" href="../">
+        <span class="home-link-cn">返回首页</span>
+        <span class="home-link-en">Back / Home</span>
+        <span class="home-link-arrow" aria-hidden="true">↗</span>
+      </a>
+    </header>
+
+    <main class="explorer" id="explorer">
+      <section class="globe-stage" aria-labelledby="page-title">
+        <div class="intro-block">
+          <p class="eyebrow">PERSONAL OBSERVATION ARCHIVE</p>
+          <h1 id="page-title">
+            <span class="title-cn">沿途记录<span aria-hidden="true">。</span></span>
+            <span class="title-en">Field Notes</span>
+          </h1>
+          <p class="subtitle">Places I've been,<br>things I've noticed.</p>
+        </div>
+
+        <div class="globe-wrap" id="globeWrap">
+          <div class="orbit-line orbit-line-one" aria-hidden="true"></div>
+          <div class="orbit-line orbit-line-two" aria-hidden="true"></div>
+          <canvas id="globeCanvas" aria-hidden="true"></canvas>
+          <div class="globe-shadow" aria-hidden="true"></div>
+
+          <div class="marker-layer" id="markerLayer" aria-label="地球上的记录地点"></div>
+
+          <div class="polaroid" id="polaroid" aria-hidden="true">
+            <div class="polaroid-image-wrap">
+              <img id="polaroidImage" alt="">
+            </div>
+            <p class="polaroid-city" id="polaroidCity"></p>
+            <p class="polaroid-meta" id="polaroidMeta"></p>
+          </div>
+
+          <div class="globe-fallback" id="globeFallback" hidden>
+            <svg viewBox="0 0 420 420" aria-hidden="true">
+              <defs>
+                <clipPath id="fallbackClip"><circle cx="210" cy="210" r="156"/></clipPath>
+              </defs>
+              <circle cx="210" cy="210" r="156" class="fallback-ocean"/>
+              <g clip-path="url(#fallbackClip)" class="fallback-land">
+                <path d="M31 160c43-15 65-2 87-18 27-19 20-49 57-58 36-8 76 3 79 25 2 15-21 18-29 35-8 16 2 32-10 43-19 18-43-1-63 13-14 10-7 35-26 43-22 10-39-9-62-2-17 5-33 20-51 15z"/>
+                <path d="M230 79c31-12 80-8 102 9 18 14 12 30 28 44 24 20 58 14 67 39 8 23-12 39-31 48-26 12-33 33-58 42-20 7-33-11-52-4-23 9-21 37-42 45-20 7-42-10-39-30 3-21 34-34 29-55-4-17-33-18-40-36-6-16 11-31 20-44 13-19-8-38 16-58z"/>
+                <path d="M247 299c20-8 45 7 53 23 8 17-8 28-8 43 0 11 10 21 4 31-11 18-45 15-58-1-12-15 2-31-5-46-7-17-12-40 14-50z"/>
+              </g>
+              <circle cx="210" cy="210" r="156" class="fallback-outline"/>
+            </svg>
+            <p>你的浏览器暂时无法显示 3D 地球，仍可从下方地点打开记录。</p>
+          </div>
+
+          <div class="cloud cloud-one" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="cloud cloud-two" aria-hidden="true"><i></i><i></i><i></i></div>
+          <svg class="tiny-plane" viewBox="0 0 62 45" aria-hidden="true">
+            <path d="m5 25 20-6L38 4l5 2-5 15 18 5-1 4-19-1-6 12-4-1 2-13-21 2Z"/>
+            <path d="M7 34c9 5 20 5 29 1" class="plane-trail"/>
+          </svg>
+        </div>
+
+        <div class="stage-footer">
+          <div class="drag-hint" aria-hidden="true">
+            <span class="drag-icon"><i></i></span>
+            <span><b>Drag to explore</b><small>拖动地球，发现沿途的记录</small></span>
+          </div>
+          <nav class="places" aria-label="沿途记录地点">
+            <p><span>PLACES</span><span id="placeCount">00</span></p>
+            <div class="place-list" id="placeList"></div>
+          </nav>
+        </div>
+      </section>
+
+      <aside class="note-panel" id="notePanel" role="dialog" aria-modal="false" aria-hidden="true" aria-labelledby="detailCity" inert>
+        <div class="sheet-handle" aria-hidden="true"></div>
+        <button class="panel-close" id="panelClose" type="button" aria-label="关闭地点记录">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </button>
+        <div class="note-scroll" id="noteScroll">
+          <p class="note-index" id="detailIndex"></p>
+          <div class="note-heading">
+            <div>
+              <h2 id="detailCity" tabindex="-1"></h2>
+              <p id="detailLocation"></p>
+            </div>
+            <p class="note-date" id="detailDate"></p>
+          </div>
+          <div class="demo-label" id="demoLabel" hidden>DEMO CONTENT · 等待替换真实记录</div>
+          <p class="note-title" id="detailTitle"></p>
+          <p class="note-description" id="detailDescription"></p>
+          <figure class="cover-figure">
+            <img id="detailCover" alt="">
+            <figcaption id="detailCoverCaption"></figcaption>
+          </figure>
+          <div class="gallery" id="detailGallery"></div>
+          <p class="camera-note" id="cameraNote" hidden></p>
+          <div class="note-end" aria-hidden="true"><span></span><b>END OF NOTE</b><span></span></div>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="demo-disclaimer">
+      <span aria-hidden="true">✳</span>
+      当前为内页体验原型：城市、文字与插画均是示例，首页入口暂未添加。
+    </footer>
+  </div>
+  <div class="page-scrim" id="pageScrim" aria-hidden="true"></div>
+  <noscript>
+    <div class="noscript-card">请启用 JavaScript 体验可旋转的地球；你也可以<a href="../">返回首页</a>。</div>
+  </noscript>
+</body>
+</html>

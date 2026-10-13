@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">Qingdao field note cover illustration</title>
+  <desc id="desc">An original editorial illustration of a lighthouse, red roof houses, waves, shells, and a sailboat.</desc>
+  <rect width="1200" height="900" rx="44" fill="#f7f8f6"/>
+  <path d="M0 477c137-52 242 35 365-4 140-43 256-69 385-20 170 65 287-47 450 14v433H0Z" fill="#73c9c6"/>
+  <path d="M0 656c141-39 237 32 366-1 147-37 255-58 389-13 174 58 292-36 445 17v241H0Z" fill="#4e73a6"/>
+  <g fill="none" stroke="#27313a" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="185" cy="188" r="75" fill="#f1cc5b" stroke-width="6"/>
+    <path d="M921 106h90l21 283H900Z" fill="#f7f8f6" stroke-width="7"/>
+    <path d="M909 243h113l8 105H901Z" fill="#ee7c63" stroke-width="7"/>
+    <path d="m899 106 55-71h27l51 71Z" fill="#d97957" stroke-width="7"/>
+    <path d="M927 35h79v-47h-79Z" fill="#f1cc5b" stroke-width="7"/>
+    <path d="M966-12v-25m-20 25v-14m40 14v-14" stroke-width="7"/>
+    <path d="M913 389c-68 26-112 67-145 124h316c-28-63-72-102-143-124Z" fill="#cfe0b4" stroke-width="7"/>
+    <path d="M76 502h154V363H76Z" fill="#f7f8f6" stroke-width="7"/>
+    <path d="m53 363 100-83 102 83Z" fill="#d97957" stroke-width="7"/>
+    <path d="M275 522h173V332H275Z" fill="#f7f8f6" stroke-width="7"/>
+    <path d="m249 332 111-88 115 88Z" fill="#ee7c63" stroke-width="7"/>
+    <path d="M116 414h45v88h-45zm211-20h67v48h-67z" fill="#f1cc5b" stroke-width="6"/>
+    <path d="M554 511v-205m0 0 125 151H554Z" fill="#f7f8f6" stroke-width="7"/>
+    <path d="M554 349 454 467h100Z" fill="#f1cc5b" stroke-width="7"/>
+    <path d="m469 486 37 56h165l34-56Z" fill="#d97957" stroke-width="7"/>
+    <path d="M41 594c84-31 141 28 222 0s135 28 214 0 137 29 216 0 137 28 216 0 139 30 246 0" stroke="#f7f8f6" stroke-width="11"/>
+    <path d="M68 703c75-28 130 25 204 0s126 25 200 0 128 26 203 0 129 26 203 0 128 26 221 0" stroke="#73c9c6" stroke-width="10"/>
+    <path d="M148 771c41-33 88-30 115 13-41 35-87 31-115-13Zm65-5 19-36" fill="#f1cc5b" stroke-width="6"/>
+    <path d="M923 747c33-42 75-48 110-14-32 43-73 49-110 14Zm49-20-1-40" fill="#ee7c63" stroke-width="6"/>
+    <path d="M736 155c22-25 47-25 68 0m24-24c22-25 47-25 68 0" stroke-width="6"/>
+  </g>
+  <g transform="translate(70 64)">
+    <rect width="297" height="82" rx="41" fill="#27313a"/>
+    <text x="148.5" y="34" text-anchor="middle" fill="#f7f8f6" font-family="Arial, sans-serif" font-size="19" font-weight="700" letter-spacing="3">FIELD NOTE 02</text>
+    <text x="148.5" y="59" text-anchor="middle" fill="#f1cc5b" font-family="Arial, sans-serif" font-size="15" letter-spacing="2">ILLUSTRATION · DEMO</text>
+  </g>
+  <g transform="translate(70 796)">
+    <text fill="#f7f8f6" font-family="Arial, sans-serif" font-size="61" font-weight="700">QINGDAO</text>
+    <text x="351" fill="#f7f8f6" font-family="Arial, sans-serif" font-size="25" letter-spacing="4">风里有海盐</text>
+  </g>
+</svg>

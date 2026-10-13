@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Nanjing breakfast table illustration</title>
+  <desc id="desc">An original vertical illustration of a warm breakfast table with a bowl, tea, newspaper, and window shadows.</desc>
+  <rect width="900" height="1200" rx="40" fill="#f7f8f6"/>
+  <path d="M0 0h900v579H0Z" fill="#cfe0b4"/>
+  <path d="M80 74h740v442H80Z" fill="#73c9c6" stroke="#27313a" stroke-width="8"/>
+  <path d="M450 75v441M80 294h740" stroke="#27313a" stroke-width="8"/>
+  <circle cx="696" cy="187" r="70" fill="#f1cc5b"/>
+  <path d="m81 324 205 192H81Zm369-30 266 222H450Z" fill="#f7f8f6" opacity=".38"/>
+  <path d="M0 579h900v621H0Z" fill="#f1cc5b"/>
+  <path d="M0 854c251-57 463-54 900 7v339H0Z" fill="#d97957"/>
+  <g fill="none" stroke="#27313a" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="432" cy="817" rx="246" ry="152" fill="#f7f8f6" stroke-width="8"/>
+    <path d="M238 775c18 130 97 201 194 201s176-71 194-201" fill="#73c9c6" stroke-width="8"/>
+    <ellipse cx="432" cy="775" rx="194" ry="92" fill="#f7f8f6" stroke-width="8"/>
+    <path d="M300 758c36-17 60 20 95 2s62 22 97 3 60 15 75-1" stroke="#d97957" stroke-width="13"/>
+    <path d="M335 716c-28-46 3-70 14-105m70 95c-29-55 8-82 15-126m65 133c-20-51 12-72 19-112" stroke-width="7"/>
+    <path d="M671 665h105v191H671Z" fill="#f7f8f6" stroke-width="8"/>
+    <path d="M776 708c83-17 92 108 0 105" stroke-width="17"/>
+    <path d="M694 705h59m-59 42h59" stroke="#4e73a6" stroke-width="8"/>
+    <path d="m64 981 264-54 65 223-264 45Z" fill="#f7f8f6" stroke-width="8"/>
+    <path d="m114 1009 175-34m-165 76 214-42m-202 84 123-24" stroke="#4e73a6" stroke-width="9"/>
+    <circle cx="686" cy="1031" r="104" fill="#cfe0b4" stroke-width="8"/>
+    <path d="M616 1001c37-34 65-26 84 4 32-27 62-23 85 9-22 83-116 114-169-13Z" fill="#ee7c63" stroke-width="7"/>
+  </g>
+  <g transform="translate(53 50)">
+    <rect width="248" height="62" rx="31" fill="#27313a"/>
+    <text x="124" y="26" text-anchor="middle" fill="#f7f8f6" font-family="Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="2">NANJING · 09:05</text>
+    <text x="124" y="46" text-anchor="middle" fill="#f1cc5b" font-family="Arial, sans-serif" font-size="12" letter-spacing="2">ILLUSTRATION DEMO</text>
+  </g>
+  <text x="53" y="564" fill="#27313a" font-family="Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="2">02 / 一碗热气腾腾</text>
+</svg>

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Tokyo local platform illustration</title>
+  <desc id="desc">An original vertical illustration of a small railway platform, yellow train, vending machine, and evening sky.</desc>
+  <rect width="900" height="1200" rx="40" fill="#f7f8f6"/>
+  <path d="M0 0h900v641H0Z" fill="#73c9c6"/>
+  <circle cx="703" cy="185" r="90" fill="#f1cc5b"/>
+  <g fill="none" stroke="#27313a" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M53 149c60-45 129-25 154 35 53-26 113 3 127 60H33c-5-43 2-72 20-95Z" fill="#f7f8f6" stroke-width="7"/>
+    <path d="M93 481h714v384H93Z" fill="#f1cc5b" stroke-width="9"/>
+    <path d="M139 542h198v198H139zm227 0h198v198H366zm227 0h168v198H593" fill="#f7f8f6" stroke-width="7"/>
+    <path d="M94 481v-84h599c48 0 89 17 114 84Z" fill="#ee7c63" stroke-width="9"/>
+    <path d="M151 865v75m598-75v75M101 941h696" stroke-width="11"/>
+    <path d="M0 941h900v259H0Z" fill="#cfe0b4" stroke-width="8"/>
+    <path d="m0 1106 900-129M0 1187l900-132" stroke="#4e73a6" stroke-width="11"/>
+    <path d="M634 830h148v335H634Z" fill="#d97957" stroke-width="8"/>
+    <path d="M654 862h108v99H654Z" fill="#f7f8f6" stroke-width="7"/>
+    <path d="M654 995h108m-108 51h108m-108 51h108" stroke="#f7f8f6" stroke-width="11"/>
+    <path d="M236 324v112m-50-112h100M205 346h62" stroke-width="9"/>
+    <rect x="197" y="363" width="78" height="45" rx="5" fill="#f7f8f6" stroke-width="7"/>
+    <path d="m104 980 181-26m-181 68 181-26" stroke="#27313a" stroke-width="8"/>
+  </g>
+  <g transform="translate(53 50)">
+    <rect width="235" height="62" rx="31" fill="#27313a"/>
+    <text x="117.5" y="26" text-anchor="middle" fill="#f7f8f6" font-family="Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="2">TOKYO · 18:42</text>
+    <text x="117.5" y="46" text-anchor="middle" fill="#f1cc5b" font-family="Arial, sans-serif" font-size="12" letter-spacing="2">ILLUSTRATION DEMO</text>
+  </g>
+  <text x="53" y="1149" fill="#27313a" font-family="Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="2">01 / 在小站等一班车</text>
+</svg>

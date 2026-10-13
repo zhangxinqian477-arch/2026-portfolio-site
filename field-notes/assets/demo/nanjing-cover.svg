@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">Nanjing field note cover illustration</title>
+  <desc id="desc">An original editorial illustration of a city wall, plane trees, river, bicycle, and warm morning sun.</desc>
+  <rect width="1200" height="900" rx="44" fill="#f7f8f6"/>
+  <path d="M0 606c161-55 289-9 435-51 183-53 337-102 520-30 107 42 166 41 245 18v357H0Z" fill="#73c9c6"/>
+  <path d="M0 680c204-61 352 55 559 13 190-39 352-129 641-41v248H0Z" fill="#cfe0b4"/>
+  <circle cx="949" cy="163" r="74" fill="#f1cc5b"/>
+  <g fill="none" stroke="#27313a" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M98 216c108 42 132 153 123 266" stroke-width="17"/>
+    <path d="M111 241c-31-35-62-44-85-31M134 274c32-46 81-59 116-53M156 319c-36-21-78-23-115-5M179 363c32-34 68-49 106-41" stroke-width="11"/>
+    <g fill="#cfe0b4" stroke-width="5">
+      <circle cx="45" cy="187" r="48"/><circle cx="107" cy="190" r="59"/><circle cx="172" cy="228" r="55"/>
+      <circle cx="45" cy="292" r="55"/><circle cx="109" cy="279" r="67"/><circle cx="194" cy="309" r="58"/>
+    </g>
+    <path d="M238 474h536v207H238z" fill="#d97957" stroke-width="7"/>
+    <path d="M214 474h584l-56-77H270Z" fill="#ee7c63" stroke-width="7"/>
+    <path d="M312 474v-65h77v65M647 474v-65h77v65" fill="#f7f8f6" stroke-width="7"/>
+    <path d="M372 681V551c0-58 49-105 110-105h49c60 0 109 47 109 105v130" fill="#f1cc5b" stroke-width="7"/>
+    <path d="M431 681V563c0-37 30-66 66-66h19c37 0 66 29 66 66v118" fill="#f7f8f6" stroke-width="7"/>
+    <path d="M263 526h75m343 0h75" stroke-width="8"/>
+    <path d="M223 681h602" stroke-width="8"/>
+    <g transform="translate(827 524) rotate(-4)" stroke-width="7">
+      <circle cx="0" cy="121" r="46" fill="#f7f8f6"/><circle cx="151" cy="121" r="46" fill="#f7f8f6"/>
+      <path d="m0 121 52-86 38 86H0l70-52h81M52 35h50m-8-27 57 113"/>
+      <circle cx="87" cy="-19" r="25" fill="#f1cc5b"/>
+      <path d="M87 7 69 70m16-39 54 27M69 70l-38 40m38-40 33 38"/>
+      <path d="M79-45c19-11 32-8 43 3" stroke="#d97957" stroke-width="10"/>
+    </g>
+  </g>
+  <g transform="translate(71 67)">
+    <rect width="288" height="82" rx="41" fill="#27313a"/>
+    <text x="144" y="34" text-anchor="middle" fill="#f7f8f6" font-family="Arial, sans-serif" font-size="19" font-weight="700" letter-spacing="3">FIELD NOTE 01</text>
+    <text x="144" y="59" text-anchor="middle" fill="#f1cc5b" font-family="Arial, sans-serif" font-size="15" letter-spacing="2">ILLUSTRATION · DEMO</text>
+  </g>
+  <g transform="translate(69 734)">
+    <text fill="#27313a" font-family="Arial, sans-serif" font-size="62" font-weight="700">NANJING</text>
+    <text y="46" fill="#27313a" font-family="Arial, sans-serif" font-size="24" letter-spacing="4">梧桐树下，慢慢走</text>
+  </g>
+  <path d="M1011 288c45 16 74 52 88 99m-44-93 23 7-7 23" fill="none" stroke="#27313a" stroke-width="6" stroke-linecap="round"/>
+</svg>

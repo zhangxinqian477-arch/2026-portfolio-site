@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">Tokyo field note cover illustration</title>
+  <desc id="desc">An original editorial illustration of a yellow local train, narrow buildings, lanterns, and evening clouds.</desc>
+  <rect width="1200" height="900" rx="44" fill="#f7f8f6"/>
+  <path d="M0 548c165-75 298-69 441-27 188 55 294-51 476-16 103 20 192 70 283 42v353H0Z" fill="#cfe0b4"/>
+  <g fill="none" stroke="#27313a" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M847 94c57-40 123-18 143 37 54-21 112 13 119 67H803c-10-46 9-83 44-104Z" fill="#73c9c6" stroke-width="7"/>
+    <path d="M92 280h156v315H92Z" fill="#f7f8f6" stroke-width="7"/>
+    <path d="M115 320h110m-110 53h110m-110 53h110m-110 53h110" stroke="#4e73a6" stroke-width="12"/>
+    <path d="M276 211h195v384H276Z" fill="#ee7c63" stroke-width="7"/>
+    <path d="M305 258h54v50h-54zm84 0h54v50h-54zm-84 83h54v50h-54zm84 0h54v50h-54z" fill="#f1cc5b" stroke-width="6"/>
+    <path d="M762 248h216v347H762Z" fill="#f7f8f6" stroke-width="7"/>
+    <path d="m740 248 130-86 130 86Z" fill="#4e73a6" stroke-width="7"/>
+    <path d="M806 313h128v172H806Z" fill="#73c9c6" stroke-width="7"/>
+    <path d="M1007 330h113v265h-113Z" fill="#d97957" stroke-width="7"/>
+    <path d="M1032 373h63m-63 57h63m-63 57h63" stroke="#f7f8f6" stroke-width="10"/>
+    <path d="M35 606h1130v178H35Z" fill="#f1cc5b" stroke-width="8"/>
+    <path d="M82 641h160v103H82zm196 0h160v103H278zm196 0h160v103H474zm196 0h160v103H670zm196 0h160v103H866" fill="#f7f8f6" stroke-width="6"/>
+    <path d="M62 606v-43h967c42 0 83 16 114 43Z" fill="#ee7c63" stroke-width="8"/>
+    <path d="M205 784v48m791-48v48M59 832h1084" stroke-width="10"/>
+    <path d="M515 233v286m-29-232h59" stroke-width="7"/>
+    <g fill="#d97957" stroke-width="5">
+      <path d="M486 287c0-25 58-25 58 0v71c0 36-58 36-58 0Z"/>
+      <path d="M498 312h35m-35 28h35" stroke="#f7f8f6"/>
+    </g>
+    <path d="M592 264v252m-29-194h59" stroke-width="7"/>
+    <path d="M563 322c0-25 58-25 58 0v71c0 36-58 36-58 0Z" fill="#f1cc5b" stroke-width="5"/>
+    <path d="M575 347h35m-35 28h35" stroke="#f7f8f6" stroke-width="5"/>
+    <path d="M109 203c28-31 60-31 87 0m21-23c27-31 59-31 86 0" stroke-width="6"/>
+  </g>
+  <g transform="translate(70 62)">
+    <rect width="290" height="82" rx="41" fill="#27313a"/>
+    <text x="145" y="34" text-anchor="middle" fill="#f7f8f6" font-family="Arial, sans-serif" font-size="19" font-weight="700" letter-spacing="3">FIELD NOTE 03</text>
+    <text x="145" y="59" text-anchor="middle" fill="#f1cc5b" font-family="Arial, sans-serif" font-size="15" letter-spacing="2">ILLUSTRATION · DEMO</text>
+  </g>
+  <g transform="translate(71 531)">
+    <text fill="#27313a" font-family="Arial, sans-serif" font-size="65" font-weight="700">TOKYO</text>
+    <text y="45" fill="#27313a" font-family="Arial, sans-serif" font-size="25" letter-spacing="4">末班车以前</text>
+  </g>
+</svg>

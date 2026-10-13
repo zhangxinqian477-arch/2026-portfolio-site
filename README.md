@@ -30,3 +30,10 @@ portfolio-viewer.js 中 PDF URL 的 v 参数（建议使用新文件 SHA256 前 
 两个阅读页面共用 reader-shell.css，左上角“返回首页”始终可用，包括加载或错误状态；全屏覆盖整个阅读页，保留返回按钮。
 后续更新简历请替换 resume.pdf 并更新 resume.html 中 data-pdf 与直接打开链接的 v 参数。邮箱仍待配置。
 本次修改前文件已备份到 ../tmp/before-resume-return-1791560738361。
+
+## Field Notes 内页原型
+
+- `/field-notes/` 是“沿途记录 / Field Notes”的独立静态页面，当前通过直链预览，首页暂未增加入口。
+- 页面使用本地打包的 Three.js 和 Natural Earth 大陆轮廓，不依赖外部 CDN；支持拖动、慢速自转、地点聚焦、桌面侧栏和手机底部面板。
+- 地点内容集中在 `field-notes/data/locations.js`。新增或替换城市时，修改一条 location 数据并把图片放进 `field-notes/assets/`，无需改动地球逻辑。
+- 南京、青岛、东京及配套插画均为明确标注的 demo 内容。接入真实照片、日期和文字后，应移除页面中的 demo 提示，再讨论首页轻入口的形式。

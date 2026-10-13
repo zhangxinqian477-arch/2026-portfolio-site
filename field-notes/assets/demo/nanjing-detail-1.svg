@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Nanjing city wall morning illustration</title>
+  <desc id="desc">An original vertical illustration of an old city gate seen through plane tree leaves in the morning.</desc>
+  <rect width="900" height="1200" rx="40" fill="#f7f8f6"/>
+  <circle cx="682" cy="228" r="101" fill="#f1cc5b"/>
+  <path d="M0 698c178-74 279 32 432-13 187-55 278-96 468-16v531H0Z" fill="#cfe0b4"/>
+  <g fill="none" stroke="#27313a" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M115 0c70 118 104 253 104 412" stroke-width="25"/>
+    <path d="M154 92 38 185m140-8 128 50M193 283 42 365m170-2 123 66" stroke-width="17"/>
+    <g fill="#73c9c6" stroke-width="6">
+      <circle cx="34" cy="118" r="70"/><circle cx="105" cy="105" r="85"/><circle cx="42" cy="247" r="83"/>
+      <circle cx="146" cy="222" r="91"/><circle cx="253" cy="198" r="73"/><circle cx="91" cy="376" r="88"/>
+      <circle cx="207" cy="348" r="85"/><circle cx="300" cy="405" r="65"/>
+    </g>
+    <path d="M152 608h601v391H152Z" fill="#d97957" stroke-width="8"/>
+    <path d="M124 608h658l-68-115H192Z" fill="#ee7c63" stroke-width="8"/>
+    <path d="M207 608v-91h102v91m284 0v-91h102v91" fill="#f7f8f6" stroke-width="8"/>
+    <path d="M298 999V792c0-92 68-166 152-166s152 74 152 166v207" fill="#f1cc5b" stroke-width="8"/>
+    <path d="M366 999V804c0-49 37-90 84-90s84 41 84 90v195" fill="#f7f8f6" stroke-width="8"/>
+    <path d="M209 703h82m318 0h82m-482 82h64m354 0h64" stroke-width="11"/>
+    <path d="M99 999h702" stroke-width="11"/>
+    <path d="M651 1044c23-62 57-94 104-100 8 54-11 99-64 132" fill="#73c9c6" stroke-width="7"/>
+    <path d="M662 1085c-12-77-53-127-119-151-16 77 18 139 101 178" fill="#f1cc5b" stroke-width="7"/>
+  </g>
+  <g transform="translate(53 50)">
+    <rect width="239" height="62" rx="31" fill="#27313a"/>
+    <text x="119.5" y="26" text-anchor="middle" fill="#f7f8f6" font-family="Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="2">NANJING · 08:10</text>
+    <text x="119.5" y="46" text-anchor="middle" fill="#f1cc5b" font-family="Arial, sans-serif" font-size="12" letter-spacing="2">ILLUSTRATION DEMO</text>
+  </g>
+  <text x="53" y="1144" fill="#27313a" font-family="Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="2">01 / 城墙边的早晨</text>
+</svg>

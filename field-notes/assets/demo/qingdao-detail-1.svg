@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Qingdao tide pool illustration</title>
+  <desc id="desc">An original vertical illustration of tide pools, striped beach towels, shells, and a small boat by the sea.</desc>
+  <rect width="900" height="1200" rx="40" fill="#f7f8f6"/>
+  <circle cx="690" cy="172" r="94" fill="#f1cc5b"/>
+  <path d="M0 380c132-55 226 32 353-5s225-61 352-2c77 36 135 39 195 18v809H0Z" fill="#73c9c6"/>
+  <path d="M0 647c151-43 273 32 411-2 176-43 278-50 489 8v547H0Z" fill="#4e73a6"/>
+  <g fill="none" stroke="#27313a" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M86 469c85-35 144 29 224 0s142 29 226 0 142 29 225 0" stroke="#f7f8f6" stroke-width="12"/>
+    <path d="M53 580c97-38 163 31 255 0s159 30 252 0 158 33 274 0" stroke="#f7f8f6" stroke-width="12"/>
+    <path d="m106 786 205-89 74 173-205 90Z" fill="#f7f8f6" stroke-width="8"/>
+    <path d="m138 772 202-33m-184 78 203-34m-184 79 201-35" stroke="#ee7c63" stroke-width="18"/>
+    <path d="M497 690c-11 93 57 163 148 168 94 5 167-58 169-152-98-46-211-50-317-16Z" fill="#f1cc5b" stroke-width="8"/>
+    <path d="M627 682V445m0 0 141 166H627Z" fill="#f7f8f6" stroke-width="8"/>
+    <path d="M627 496 516 626h111Z" fill="#ee7c63" stroke-width="8"/>
+    <path d="M504 652h270l-28 63H531Z" fill="#d97957" stroke-width="8"/>
+    <path d="M81 1014c48-69 104-72 153-7-41 72-102 76-153 7Zm70-15-2-76" fill="#cfe0b4" stroke-width="8"/>
+    <path d="M647 1004c56-52 113-42 147 30-59 52-114 40-147-30Zm71 5 29-66" fill="#f1cc5b" stroke-width="8"/>
+    <path d="M194 265c28-33 61-33 91 0m30-24c28-33 61-33 91 0" stroke-width="7"/>
+  </g>
+  <g transform="translate(53 50)">
+    <rect width="249" height="62" rx="31" fill="#27313a"/>
+    <text x="124.5" y="26" text-anchor="middle" fill="#f7f8f6" font-family="Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="2">QINGDAO · 15:40</text>
+    <text x="124.5" y="46" text-anchor="middle" fill="#f1cc5b" font-family="Arial, sans-serif" font-size="12" letter-spacing="2">ILLUSTRATION DEMO</text>
+  </g>
+  <text x="53" y="1144" fill="#f7f8f6" font-family="Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="2">01 / 潮水退去以后</text>
+</svg>
