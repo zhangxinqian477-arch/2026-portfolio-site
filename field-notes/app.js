@@ -40,6 +40,7 @@ const markerScreenPositions = new Map();
 const state = {
   selectedId: null,
   hoveredId: null,
+  hoverSource: null,
   lastTrigger: null,
   keyboardSelection: false,
   renderer: null,
@@ -74,6 +75,16 @@ function createLocationControls() {
     placeButton.setAttribute('aria-controls', 'notePanel');
     placeButton.setAttribute('aria-expanded', 'false');
     placeButton.innerHTML = `<span>${location.city}</span><small>${location.cityEn}</small>`;
+    placeButton.addEventListener('pointerenter', event => {
+      if (event.pointerType === 'mouse') setLinkedLocation(location.id, 'place');
+    });
+    placeButton.addEventListener('pointerleave', event => {
+      if (event.pointerType === 'mouse' && document.activeElement !== placeButton) {
+        clearLinkedLocation(location.id, 'place');
+      }
+    });
+    placeButton.addEventListener('focus', () => setLinkedLocation(location.id, 'place'));
+    placeButton.addEventListener('blur', () => clearLinkedLocation(location.id, 'place'));
     placeButton.addEventListener('click', event => selectLocation(location, event.currentTarget, event.detail === 0));
     elements.placeList.appendChild(placeButton);
     placeButtons.set(location.id, placeButton);
@@ -102,10 +113,28 @@ function createLocationControls() {
   });
 }
 
-function showPreview(id) {
-  if (compactLayout.matches || !locationById.has(id)) return;
-  const location = locationById.get(id);
+function setLinkedLocation(id, source) {
+  if (!locationById.has(id)) return;
   state.hoveredId = id;
+  state.hoverSource = source;
+  locations.forEach(location => {
+    placeButtons.get(location.id)?.classList.toggle('is-linked', location.id === id);
+  });
+}
+
+function clearLinkedLocation(id, source = null) {
+  if (state.hoveredId !== id || (source && state.hoverSource !== source)) return;
+  state.hoveredId = null;
+  state.hoverSource = null;
+  locations.forEach(location => placeButtons.get(location.id)?.classList.remove('is-linked'));
+  elements.polaroid.classList.remove('is-visible');
+}
+
+function showPreview(id) {
+  if (!locationById.has(id)) return;
+  setLinkedLocation(id, 'marker');
+  if (compactLayout.matches) return;
+  const location = locationById.get(id);
   elements.polaroidImage.src = location.cover;
   elements.polaroidImage.alt = location.coverAlt;
   elements.polaroidCity.textContent = `${location.city} · ${location.cityEn}`;
@@ -115,9 +144,7 @@ function showPreview(id) {
 }
 
 function hidePreview(id) {
-  if (state.hoveredId !== id) return;
-  state.hoveredId = null;
-  elements.polaroid.classList.remove('is-visible');
+  clearLinkedLocation(id, 'marker');
 }
 
 function positionPreview(id) {
@@ -183,7 +210,7 @@ function selectLocation(location, trigger, keyboardSelection = false) {
   state.lastTrigger = trigger;
   state.keyboardSelection = keyboardSelection;
   state.resumeRotationAt = Number.POSITIVE_INFINITY;
-  hidePreview(state.hoveredId);
+  clearLinkedLocation(state.hoveredId);
   renderDetail(location);
   updateSelectionStates();
   focusGlobe(location, reducedMotion.matches ? 90 : 780);
@@ -273,43 +300,56 @@ function createMarkerVisual(location, index) {
   const normal = latLngToVector(location.lat, location.lng).normalize();
   const group = new THREE.Group();
   const color = new THREE.Color(colors[index % colors.length]);
-  const pegMaterial = new THREE.MeshStandardMaterial({
+  const tagMaterial = new THREE.MeshStandardMaterial({
     color,
-    roughness: .82,
+    roughness: .78,
     metalness: 0,
-    emissive: color.clone().multiplyScalar(.08)
+    emissive: color.clone().multiplyScalar(.055)
   });
   const baseMaterial = new THREE.MeshStandardMaterial({
     color: 0xf8f4e8,
     roughness: .92,
     metalness: 0
   });
-  const ringMaterial = new THREE.MeshBasicMaterial({
+  const selectionRingMaterial = new THREE.MeshBasicMaterial({
     color: 0xf7f8f6,
     transparent: true,
     opacity: 0
   });
-  const base = new THREE.Mesh(new THREE.CylinderGeometry(.023, .032, .035, 16), baseMaterial);
-  const stem = new THREE.Mesh(new THREE.CylinderGeometry(.012, .017, .082, 14), pegMaterial);
-  const cap = new THREE.Mesh(new THREE.SphereGeometry(.035, 18, 12), pegMaterial);
-  const ring = new THREE.Mesh(new THREE.TorusGeometry(.055, .006, 8, 24), ringMaterial);
+  const shadowMaterial = new THREE.MeshBasicMaterial({
+    color: 0x506b6e,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+    transparent: true,
+    opacity: .16
+  });
+  const base = new THREE.Mesh(new THREE.CylinderGeometry(.021, .029, .022, 18), baseMaterial);
+  const shadow = new THREE.Mesh(new THREE.CircleGeometry(.037, 20), shadowMaterial);
+  const stem = new THREE.Mesh(new THREE.CylinderGeometry(.0065, .0095, .112, 14), tagMaterial);
+  const cap = new THREE.Mesh(new THREE.CylinderGeometry(.037, .037, .016, 24), tagMaterial);
+  const selectionRing = new THREE.Mesh(new THREE.TorusGeometry(.056, .005, 8, 24), selectionRingMaterial);
 
-  base.position.y = .018;
-  stem.position.y = .067;
-  cap.position.y = .112;
-  ring.position.y = .032;
-  ring.rotation.x = Math.PI / 2;
-  group.add(base, stem, cap, ring);
+  shadow.position.y = .003;
+  shadow.rotation.x = -Math.PI / 2;
+  base.position.y = .014;
+  stem.position.set(0, .078, .021);
+  stem.rotation.x = .38;
+  cap.position.set(0, .13, .042);
+  cap.rotation.x = .38;
+  selectionRing.position.y = .018;
+  selectionRing.rotation.x = Math.PI / 2;
+  group.add(shadow, base, stem, cap, selectionRing);
   group.position.copy(normal.clone().multiplyScalar(globeRadius));
   group.quaternion.setFromUnitVectors(localUp, normal);
   state.globeGroup.add(group);
 
   markerVisuals.set(location.id, {
     group,
-    ring,
+    selectionRing,
     normal,
-    anchor: normal.clone().multiplyScalar(globeRadius + .13),
-    scale: 1
+    anchor: normal.clone().multiplyScalar(globeRadius + .16),
+    scale: 1,
+    lift: 0
   });
 }
 
@@ -332,7 +372,7 @@ async function initGlobe() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.03;
+    renderer.toneMappingExposure = 1.1;
     state.renderer = renderer;
 
     const scene = new THREE.Scene();
@@ -352,7 +392,7 @@ async function initGlobe() {
       new THREE.SphereGeometry(globeRadius, 72, 54),
       new THREE.MeshStandardMaterial({
         map: texture,
-        roughness: .92,
+        roughness: .88,
         metalness: 0
       })
     );
@@ -365,16 +405,16 @@ async function initGlobe() {
         color: 0xf4fcfa,
         side: THREE.BackSide,
         transparent: true,
-        opacity: .14
+        opacity: .11
       })
     );
     globeGroup.add(atmosphere);
 
-    scene.add(new THREE.HemisphereLight(0xfffdf4, 0x5d7884, 2.1));
-    const keyLight = new THREE.DirectionalLight(0xfff6e6, 3.25);
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x78979c, 2.35));
+    const keyLight = new THREE.DirectionalLight(0xfffaec, 2.75);
     keyLight.position.set(-3.2, 4.4, 5.2);
     scene.add(keyLight);
-    const fillLight = new THREE.DirectionalLight(0x9ddfe1, 1.1);
+    const fillLight = new THREE.DirectionalLight(0xb4eff0, 1.35);
     fillLight.position.set(4, -1, 3);
     scene.add(fillLight);
 
@@ -465,6 +505,17 @@ function updateMarkerPositions() {
     const button = markerButtons.get(location.id);
     if (!visual || !button) return;
 
+    const active = state.selectedId === location.id;
+    const hovered = state.hoveredId === location.id;
+    const targetScale = active ? 1.18 : hovered ? 1.1 : 1;
+    const targetLift = active ? .035 : hovered ? .022 : 0;
+    visual.scale += (targetScale - visual.scale) * .16;
+    visual.lift += (targetLift - visual.lift) * .16;
+    visual.group.scale.setScalar(visual.scale);
+    visual.group.position.copy(visual.normal).multiplyScalar(globeRadius + visual.lift);
+    visual.anchor.copy(visual.normal).multiplyScalar(globeRadius + .16 + visual.lift);
+    visual.selectionRing.material.opacity += ((active ? .76 : hovered ? .34 : 0) - visual.selectionRing.material.opacity) * .14;
+
     worldPoint.copy(visual.anchor).applyQuaternion(state.globeGroup.quaternion);
     worldNormal.copy(visual.normal).applyQuaternion(state.globeGroup.quaternion).normalize();
     towardCamera.copy(state.camera.position).sub(worldPoint).normalize();
@@ -482,15 +533,9 @@ function updateMarkerPositions() {
     button.setAttribute('aria-hidden', String(!visible));
     button.tabIndex = visible ? 0 : -1;
 
-    const active = state.selectedId === location.id;
-    const hovered = state.hoveredId === location.id;
-    const targetScale = active ? 1.34 : hovered ? 1.17 : 1;
-    visual.scale += (targetScale - visual.scale) * .16;
-    visual.group.scale.setScalar(visual.scale);
-    visual.ring.material.opacity += ((active ? .82 : 0) - visual.ring.material.opacity) * .14;
   });
 
-  if (state.hoveredId) {
+  if (state.hoveredId && state.hoverSource === 'marker') {
     const point = markerScreenPositions.get(state.hoveredId);
     if (!point?.visible) hidePreview(state.hoveredId);
     else positionPreview(state.hoveredId);
