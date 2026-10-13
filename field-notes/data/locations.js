@@ -30,6 +30,36 @@ export const locations = Object.freeze([
     demo: true
   },
   {
+    id: 'shenzhen',
+    city: '深圳',
+    cityEn: 'Shenzhen',
+    country: 'China',
+    lat: 22.5431,
+    lng: 114.0579,
+    date: '示例内容',
+    previewMeta: 'Demo note',
+    title: '海风经过密集生长的街道',
+    description: '示例文案：这里会放你在深圳留下的一段真实观察。照片、路线、展览或偶然遇见的城市细节，都可以整理成一则短记录。',
+    cover: './assets/demo/shenzhen-cover.svg',
+    coverAlt: '深圳城市街道的示例旅行插画',
+    assets: [
+      {
+        src: './assets/demo/shenzhen-detail-1.svg',
+        type: 'photo',
+        caption: '示例图片 · 城市切片',
+        alt: '深圳城市切片的示例旅行插画'
+      },
+      {
+        src: './assets/demo/shenzhen-detail-2.svg',
+        type: 'note',
+        caption: '示例图片 · 海风与街道',
+        alt: '深圳海风与街道的示例旅行插画'
+      }
+    ],
+    camera: null,
+    demo: true
+  },
+  {
     id: 'qingdao',
     city: '青岛',
     cityEn: 'Qingdao',
@@ -60,30 +90,30 @@ export const locations = Object.freeze([
     demo: true
   },
   {
-    id: 'tokyo',
-    city: '东京',
-    cityEn: 'Tokyo',
-    country: 'Japan',
-    lat: 35.6762,
-    lng: 139.6503,
+    id: 'xian',
+    city: '西安',
+    cityEn: "Xi'an",
+    country: 'China',
+    lat: 34.3416,
+    lng: 108.9398,
     date: '示例内容',
     previewMeta: 'Demo note',
-    title: '展览结束后的城市灯光',
-    description: '示例文案：这里可以记录一次展览、一个产品细节，或一张回去之后仍然记得的照片。真正上线前会替换为你的实际内容。',
-    cover: './assets/demo/tokyo-cover.svg',
-    coverAlt: '东京街灯与展览空间的示例旅行插画',
+    title: '城墙转角留下的光和风',
+    description: '示例文案：这里可以记录西安的一段散步、一个空间细节，或一张回去之后仍然记得的照片。真正上线前会替换为你的实际内容。',
+    cover: './assets/demo/xian-cover.svg',
+    coverAlt: '西安城墙与街道的示例旅行插画',
     assets: [
       {
-        src: './assets/demo/tokyo-detail-1.svg',
+        src: './assets/demo/xian-detail-1.svg',
         type: 'photo',
-        caption: '示例图片 · 展览之后',
-        alt: '东京展览空间的示例旅行插画'
+        caption: '示例图片 · 城墙边',
+        alt: '西安城墙边的示例旅行插画'
       },
       {
-        src: './assets/demo/tokyo-detail-2.svg',
+        src: './assets/demo/xian-detail-2.svg',
         type: 'guide',
-        caption: '示例图片 · 夜间散步',
-        alt: '东京夜间街道的示例旅行插画'
+        caption: '示例图片 · 沿途小物',
+        alt: '西安沿途小物的示例旅行插画'
       }
     ],
     camera: null,

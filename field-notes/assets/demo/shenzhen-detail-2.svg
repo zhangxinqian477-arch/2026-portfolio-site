@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Shenzhen kissaten table illustration</title>
+  <desc id="desc">An original vertical illustration of a quiet table with a drink, a folded map, and window plants.</desc>
+  <rect width="900" height="1200" rx="40" fill="#f7f8f6"/>
+  <path d="M0 0h900v590H0Z" fill="#cfe0b4"/>
+  <path d="M78 71h744v449H78Z" fill="#f7f8f6" stroke="#27313a" stroke-width="8"/>
+  <path d="M450 72v448M78 306h744" stroke="#27313a" stroke-width="8"/>
+  <path d="M79 72h370L79 443Zm371 234h371v213H650Z" fill="#73c9c6"/>
+  <path d="M0 590h900v610H0Z" fill="#d97957"/>
+  <path d="M0 890c213-48 455-28 900 45v265H0Z" fill="#f1cc5b"/>
+  <g fill="none" stroke="#27313a" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="456" cy="831" rx="335" ry="178" fill="#f7f8f6" stroke-width="9"/>
+    <path d="M508 538h149v313H508Z" fill="#73c9c6" stroke-width="8"/>
+    <path d="M532 576h101m-101 51h101" stroke="#f7f8f6" stroke-width="10"/>
+    <path d="M527 538c12-67 111-67 118 0" fill="#f7f8f6" stroke-width="8"/>
+    <path d="M554 492c18-51 36-79 52-109" stroke-width="9"/>
+    <circle cx="612" cy="368" r="27" fill="#ee7c63" stroke-width="7"/>
+    <path d="M221 696h204l-22 135H243Z" fill="#f7f8f6" stroke-width="8"/>
+    <path d="M247 696c7-89 141-89 152 0" fill="#f1cc5b" stroke-width="8"/>
+    <path d="M273 652c9-31 31-49 54-71m3 70c5-28 24-48 42-62" stroke-width="8"/>
+    <path d="m126 960 296-55 47 219-295 48Z" fill="#f7f8f6" stroke-width="8"/>
+    <path d="m165 992 109-20 42 29 116-22m-250 87 109-16 39 31 111-20" stroke="#4e73a6" stroke-width="9"/>
+    <path d="M669 948c-37 55-20 110 41 146 61-37 76-94 38-149-26 22-53 22-79 3Z" fill="#73c9c6" stroke-width="8"/>
+    <path d="M708 929v-83" stroke-width="9"/>
+    <path d="M126 426c45-91 128-95 180-15-35 74-118 96-180 15Zm89-33c-2-63 30-91 80-86 6 52-19 91-80 86Z" fill="#cfe0b4" stroke-width="7"/>
+  </g>
+  <g transform="translate(53 50)">
+    <rect width="233" height="62" rx="31" fill="#27313a"/>
+    <text x="116.5" y="26" text-anchor="middle" fill="#f7f8f6" font-family="Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="2">SHENZHEN · 14:16</text>
+    <text x="116.5" y="46" text-anchor="middle" fill="#f1cc5b" font-family="Arial, sans-serif" font-size="12" letter-spacing="2">ILLUSTRATION DEMO</text>
+  </g>
+  <text x="53" y="570" fill="#27313a" font-family="Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="2">02 / 海风经过街道</text>
+</svg>

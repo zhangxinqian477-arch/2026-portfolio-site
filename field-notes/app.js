@@ -97,6 +97,13 @@ function createLocationControls() {
     markerButton.setAttribute('aria-controls', 'notePanel');
     markerButton.setAttribute('aria-expanded', 'false');
     markerButton.tabIndex = -1;
+    markerButton.style.setProperty('--marker-color', colors[index % colors.length]);
+    markerButton.innerHTML = `
+      <span class="marker-pin" aria-hidden="true">
+        <svg viewBox="0 0 48 60" focusable="false">
+          <path fill-rule="evenodd" d="M24 58C19.1 51.2 5 38.1 5 23.4 5 12.7 13.5 4 24 4s19 8.7 19 19.4C43 38.1 28.9 51.2 24 58Zm0-28.1a7 7 0 1 0 0-14 7 7 0 0 0 0 14Z"/>
+        </svg>
+      </span>`;
     markerButton.addEventListener('pointerenter', event => {
       if (event.pointerType === 'mouse') showPreview(location.id);
     });
@@ -296,60 +303,11 @@ function easeInOutCubic(value) {
   return value < .5 ? 4 * value * value * value : 1 - Math.pow(-2 * value + 2, 3) / 2;
 }
 
-function createMarkerVisual(location, index) {
+function createMarkerVisual(location) {
   const normal = latLngToVector(location.lat, location.lng).normalize();
-  const group = new THREE.Group();
-  const color = new THREE.Color(colors[index % colors.length]);
-  const tagMaterial = new THREE.MeshStandardMaterial({
-    color,
-    roughness: .78,
-    metalness: 0,
-    emissive: color.clone().multiplyScalar(.055)
-  });
-  const baseMaterial = new THREE.MeshStandardMaterial({
-    color: 0xf8f4e8,
-    roughness: .92,
-    metalness: 0
-  });
-  const selectionRingMaterial = new THREE.MeshBasicMaterial({
-    color: 0xf7f8f6,
-    transparent: true,
-    opacity: 0
-  });
-  const shadowMaterial = new THREE.MeshBasicMaterial({
-    color: 0x506b6e,
-    depthWrite: false,
-    side: THREE.DoubleSide,
-    transparent: true,
-    opacity: .16
-  });
-  const base = new THREE.Mesh(new THREE.CylinderGeometry(.021, .029, .022, 18), baseMaterial);
-  const shadow = new THREE.Mesh(new THREE.CircleGeometry(.037, 20), shadowMaterial);
-  const stem = new THREE.Mesh(new THREE.CylinderGeometry(.0065, .0095, .112, 14), tagMaterial);
-  const cap = new THREE.Mesh(new THREE.CylinderGeometry(.037, .037, .016, 24), tagMaterial);
-  const selectionRing = new THREE.Mesh(new THREE.TorusGeometry(.056, .005, 8, 24), selectionRingMaterial);
-
-  shadow.position.y = .003;
-  shadow.rotation.x = -Math.PI / 2;
-  base.position.y = .014;
-  stem.position.set(0, .078, .021);
-  stem.rotation.x = .38;
-  cap.position.set(0, .13, .042);
-  cap.rotation.x = .38;
-  selectionRing.position.y = .018;
-  selectionRing.rotation.x = Math.PI / 2;
-  group.add(shadow, base, stem, cap, selectionRing);
-  group.position.copy(normal.clone().multiplyScalar(globeRadius));
-  group.quaternion.setFromUnitVectors(localUp, normal);
-  state.globeGroup.add(group);
-
   markerVisuals.set(location.id, {
-    group,
-    selectionRing,
     normal,
-    anchor: normal.clone().multiplyScalar(globeRadius + .16),
-    scale: 1,
-    lift: 0
+    anchor: normal.clone().multiplyScalar(globeRadius + .035)
   });
 }
 
@@ -377,7 +335,7 @@ async function initGlobe() {
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(34, 1, .1, 20);
-    camera.position.set(0, 0, 3.65);
+    camera.position.set(0, 0, 4.18);
     camera.lookAt(0, 0, 0);
     state.scene = scene;
     state.camera = camera;
@@ -507,14 +465,8 @@ function updateMarkerPositions() {
 
     const active = state.selectedId === location.id;
     const hovered = state.hoveredId === location.id;
-    const targetScale = active ? 1.18 : hovered ? 1.1 : 1;
-    const targetLift = active ? .035 : hovered ? .022 : 0;
-    visual.scale += (targetScale - visual.scale) * .16;
-    visual.lift += (targetLift - visual.lift) * .16;
-    visual.group.scale.setScalar(visual.scale);
-    visual.group.position.copy(visual.normal).multiplyScalar(globeRadius + visual.lift);
-    visual.anchor.copy(visual.normal).multiplyScalar(globeRadius + .16 + visual.lift);
-    visual.selectionRing.material.opacity += ((active ? .76 : hovered ? .34 : 0) - visual.selectionRing.material.opacity) * .14;
+    const lift = active ? .04 : hovered ? .022 : 0;
+    visual.anchor.copy(visual.normal).multiplyScalar(globeRadius + .035 + lift);
 
     worldPoint.copy(visual.anchor).applyQuaternion(state.globeGroup.quaternion);
     worldNormal.copy(visual.normal).applyQuaternion(state.globeGroup.quaternion).normalize();
@@ -530,6 +482,7 @@ function updateMarkerPositions() {
     button.style.left = `${x}px`;
     button.style.top = `${y}px`;
     button.classList.toggle('is-visible', visible);
+    button.classList.toggle('is-linked', hovered);
     button.setAttribute('aria-hidden', String(!visible));
     button.tabIndex = visible ? 0 : -1;
 
