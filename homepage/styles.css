@@ -28,5 +28,61 @@ footer{display:flex;justify-content:center;align-items:center;gap:7px;margin-top
 @media(max-width:767px){.portal{padding:0 26px}.header{padding-top:27px}.wordmark{font-size:11px;letter-spacing:1.5px;gap:7px}.wordmark-dot{font-size:19px}.email{font-size:13px;gap:6px}.air{height:110px;justify-content:flex-start;padding-left:1px}.air-caption{font-size:13px;letter-spacing:0;left:3px;top:21px}.star-one{left:auto;right:11%;top:67%;width:14px}.star-two{right:0;top:25%;width:21px}.intro{text-align:left}.intro h1{font-size:32px;letter-spacing:0;margin-bottom:19px}.description{font-size:17px;line-height:1.9;letter-spacing:0}.desktop-break{display:none}.english{font-size:12px;line-height:1.8;margin-top:20px}.english .role{font-size:13px;letter-spacing:.2px}.mobile-break{display:block}.destinations{flex-direction:column;align-items:center;gap:26px;margin-top:65px}.folder{width:min(100%,330px)}.folder-art{height:auto;aspect-ratio:300/206}.folder-label{top:37%;left:10%;right:10%;bottom:11%}.folder-label h2{font-size:21px;margin-top:9px}.folder-caption{margin-top:10px}.papers{top:20%;height:70%;left:10%;right:10%}.bird{left:13%;top:-38px}.soft-shape{width:230px;height:220px;left:calc(50% - 195px)}.soft-shape.right{left:calc(50% - 24px)}footer{padding:48px 0 25px;font-size:10px;gap:5px;letter-spacing:0}.footer-star{font-size:15px}.folder-number{font-size:11px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.flight-trail,.reveal-shapes{display:none}}
 
+/* Field Notes is a quieter discovery below the two primary destinations. */
+.destinations{align-items:center;flex-direction:column;gap:0;width:100%}
+.primary-destinations{display:flex;gap:60px;justify-content:center}
+.field-notes-entry{color:#65747a;display:block;margin-left:162px;margin-top:34px;position:relative;touch-action:manipulation;width:214px}
+.field-notes-art{height:145px;position:relative;transition:transform 300ms cubic-bezier(.2,.75,.25,1);width:100%}
+.travel-map{height:100%;inset:0;overflow:visible;position:absolute;width:100%;z-index:2}
+.map-sheet{fill:#dceee8;stroke:#72989b;stroke-linejoin:round;stroke-width:1.2}
+.map-fold{fill:none;opacity:.28;stroke:#72989b;stroke-width:1}
+.map-route{fill:none;stroke:#587f9d;stroke-dasharray:.075 .045;stroke-dashoffset:0;stroke-linecap:round;stroke-width:1.7;transition:stroke-dashoffset 320ms ease}
+.map-point{fill:#f0ce72;stroke:#587f9d;stroke-width:1.25}
+.point-two{fill:#f7f1d7}
+.map-pin path{fill:none;stroke:#d47c5d;stroke-linecap:round;stroke-width:1.8}
+.map-pin circle{fill:#f5b284;stroke:#587f9d;stroke-width:1.4;transform-box:fill-box;transform-origin:center;transition:transform 300ms cubic-bezier(.2,.8,.25,1)}
+.travel-photo{height:58px;position:absolute;right:18px;top:-13px;transform:rotate(3deg);transition:transform 300ms cubic-bezier(.2,.8,.25,1);width:70px;z-index:1}
+.travel-photo svg{height:100%;overflow:visible;width:100%}
+.travel-photo rect{fill:#fffdf6;stroke:#94a6a4;stroke-width:1}
+.travel-photo .photo-sky{fill:#bfe2df;stroke:none}
+.travel-photo .photo-sun{fill:#efcb70;stroke:none}
+.travel-photo .photo-land{fill:#bfcfa6;stroke:#708e90;stroke-linejoin:round;stroke-width:.8}
+.field-notes-label{bottom:24px;left:31px;position:absolute;text-align:left;z-index:3}
+.field-notes-label strong,.field-notes-label span{display:block}
+.field-notes-label strong{color:#40555b;font-family:var(--font-cjk);font-size:17px;font-weight:500;letter-spacing:.02em;line-height:1.5}
+.field-notes-label span{color:#627b81;font-family:var(--font-latin);font-size:12.5px;font-weight:400;letter-spacing:.02em;margin-top:1px}
+.field-notes-caption{align-items:center;color:#8a9593;display:flex;font-family:var(--font-cjk);font-size:11px;justify-content:space-between;letter-spacing:.02em;margin:6px 10px 0;transition:color 250ms ease}
+.field-notes-caption span:last-child{font-family:var(--font-latin);font-size:17px;line-height:1}
+.field-notes-entry:active .field-notes-art{transform:translateY(-2px) scale(.985)}
+.field-notes-entry:focus-visible .field-notes-art{transform:translateY(-4px)}
+.field-notes-entry:focus-visible .travel-photo{transform:translateY(-10px) rotate(4deg)}
+.field-notes-entry:focus-visible .map-route{stroke-dashoffset:-.12}
+.field-notes-entry:focus-visible .map-pin circle{transform:translateY(-2px) scale(1.14)}
+.field-notes-entry:focus-visible .field-notes-caption{color:#52666c}
+.field-notes-entry.is-departing .field-notes-art{transform:translateY(-4px) scale(1.015)}
+.field-notes-entry.is-departing .travel-photo{transform:translateY(-11px) rotate(4deg)}
+.field-notes-entry.is-departing .map-route{stroke-dashoffset:-.24}
+.field-notes-entry.is-departing .map-pin circle{transform:translateY(-2px) scale(1.2)}
+
+@media(hover:hover){
+  .field-notes-entry:hover .field-notes-art{transform:translateY(-4px)}
+  .field-notes-entry:hover .travel-photo{transform:translateY(-10px) rotate(4deg)}
+  .field-notes-entry:hover .map-route{stroke-dashoffset:-.12}
+  .field-notes-entry:hover .map-pin circle{transform:translateY(-2px) scale(1.14)}
+  .field-notes-entry:hover .field-notes-caption{color:#52666c}
+}
+
+@media(min-width:768px) and (max-width:1199px){
+  .primary-destinations{gap:48px}
+  .field-notes-entry{margin-left:140px}
+}
+
+@media(max-width:767px){
+  .destinations{width:100%}
+  .primary-destinations{align-items:center;flex-direction:column;gap:26px;width:100%}
+  .field-notes-entry{align-self:flex-end;margin:32px 8px 0 0;width:210px}
+  .field-notes-art{height:142px}
+}
+
 
 

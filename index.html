@@ -9,9 +9,9 @@
   <link rel="icon" type="image/svg+xml" href="homepage/assets/favicon.svg">
   <link rel="preload" href="homepage/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="homepage/assets/fonts/noto-sans-sc-page.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="homepage/styles.css">
+  <link rel="stylesheet" href="homepage/styles.css?v=3">
   <script src="homepage/config.js" defer></script>
-  <script src="homepage/portal.js?v=2" defer></script>
+  <script src="homepage/portal.js?v=3" defer></script>
 </head>
 <body>
   <div class="portal">
@@ -39,8 +39,9 @@
         </div>
       </section>
 
-      <nav class="destinations" aria-label="作品集与简历">
-        <a class="folder resume" data-destination="resume" href="#resume" aria-label="打开简历 Resume">
+      <nav class="destinations" aria-label="作品集、简历与沿途记录">
+        <div class="primary-destinations">
+          <a class="folder resume" data-destination="resume" href="#resume" aria-label="打开简历 Resume">
           <div class="folder-art">
             <svg class="folder-back" viewBox="0 0 300 206" aria-hidden="true"><path d="M7 29Q6 18 18 18L90 19Q98 18 104 28L113 42 280 40Q294 40 293 53L292 189Q293 201 280 201L20 200Q7 201 8 188Z"/></svg>
             <div class="papers" aria-hidden="true"><div class="paper cv-paper"><div class="cv-heading"><b></b><span></span></div><i></i><i></i><div class="cv-rule"></div><i></i><i></i><i></i></div></div>
@@ -50,9 +51,9 @@
             </div>
           </div>
           <div class="folder-caption"><span>CV · 2026</span><span aria-hidden="true">↗</span></div>
-        </a>
+          </a>
 
-        <a class="folder portfolio" data-destination="portfolio" href="#portfolio" aria-label="打开作品集 Portfolio">
+          <a class="folder portfolio" data-destination="portfolio" href="#portfolio" aria-label="打开作品集 Portfolio">
           <div class="folder-art">
             <svg class="folder-back" viewBox="0 0 300 206" aria-hidden="true"><path d="M7 29Q5 18 17 18L89 17Q98 17 103 27L111 41 283 40Q294 40 293 52L294 187Q294 200 282 200L18 201Q7 201 7 189Z"/></svg>
             <div class="papers" aria-hidden="true">
@@ -84,6 +85,39 @@
             </div>
           </div>
           <div class="folder-caption"><span>Selected Works</span><span aria-hidden="true">↗</span></div>
+          </a>
+        </div>
+
+        <a class="field-notes-entry" data-destination="fieldNotes" href="field-notes/" aria-label="Open Field Notes">
+          <div class="field-notes-art">
+            <div class="travel-photo" aria-hidden="true">
+              <svg viewBox="0 0 70 58">
+                <rect x="1" y="1" width="68" height="56" rx="2"/>
+                <path class="photo-sky" d="M7 8h56v34H7z"/>
+                <path class="photo-sun" d="M48 13a5 5 0 1 1 0 10 5 5 0 0 1 0-10Z"/>
+                <path class="photo-land" d="m7 34 12-10 10 8 8-6 12 8 14-5v13H7Z"/>
+              </svg>
+            </div>
+            <svg class="travel-map" viewBox="0 0 220 154" aria-hidden="true">
+              <path class="map-sheet" d="M12 21Q12 11 23 12l58 5 59-6 59 6q9 1 9 11l-3 110q0 8-9 7l-57-6-59 7-58-6q-9-1-9-10Z"/>
+              <path class="map-fold" d="m80 18 1 118m59-125-1 128"/>
+              <path class="map-route" pathLength="1" d="M35 49c29-20 48 21 76 5s38-12 66 7"/>
+              <circle class="map-point point-one" cx="35" cy="49" r="4"/>
+              <circle class="map-point point-two" cx="109" cy="55" r="4"/>
+              <g class="map-pin" transform="translate(177 61)">
+                <path d="M0 0v13"/>
+                <circle cy="-2" r="6"/>
+              </g>
+            </svg>
+            <div class="field-notes-label">
+              <strong>沿途记录</strong>
+              <span>Field Notes</span>
+            </div>
+          </div>
+          <div class="field-notes-caption">
+            <span>一些沿途的小观察</span>
+            <span aria-hidden="true">↗</span>
+          </div>
         </a>
       </nav>
     </main>
@@ -91,6 +125,6 @@
   </div>
   <svg class="flight-trail" aria-hidden="true"><path/></svg>
   <div class="notice" role="status" aria-live="polite"></div>
-  <noscript><p class="noscript-note">请启用 JavaScript 使用入口动画，或直接打开作品集。</p><p><a href="portfolio.html">打开作品集</a></p></noscript>
+  <noscript><p class="noscript-note">请启用 JavaScript 使用入口动画，或直接打开下方内容。</p><p><a href="portfolio.html">打开作品集</a> · <a href="field-notes/">打开沿途记录</a></p></noscript>
 </body>
 </html>

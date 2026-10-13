@@ -162,7 +162,7 @@
     [['.intro h1',1400,450],['.description',1740,400],['.english',1900,350]].forEach(([selector,delay,duration])=>animate(document.querySelector(selector),[
       {opacity:0,translate:'0 10px'},{opacity:1,translate:'0 0'}
     ],{duration,delay,easing:'cubic-bezier(.2,.7,.3,1)'}));
-    [['.resume',2000],['.portfolio',2080]].forEach(([selector,delay])=>animate(document.querySelector(selector),[
+    [['.resume',2000],['.portfolio',2080],['.field-notes-entry',2320]].forEach(([selector,delay])=>animate(document.querySelector(selector),[
       {opacity:0,translate:'0 12px'},
       {opacity:1,translate:'0 4px',offset:.38},
       {opacity:1,translate:'0 0'}
@@ -199,9 +199,19 @@
       const go=()=>{
         clickTimer=null;
         if(url){rememberEntrance();location.assign(url);}
-        else showNotice({portfolio:'作品集链接待补充。',resume:'简历链接待补充。',email:'联系邮箱待补充。'}[key]);
+        else showNotice({portfolio:'作品集链接待补充。',resume:'简历链接待补充。',fieldNotes:'沿途记录链接待补充。',email:'联系邮箱待补充。'}[key]);
       };
       if(key==='email'||reducedMotion.matches||!Element.prototype.animate){go();return;}
+      if(key==='fieldNotes'){
+        link.classList.add('is-departing');
+        link.querySelector('.field-notes-art').animate([
+          {transform:'translateY(-4px) scale(1)'},
+          {transform:'translateY(-5px) scale(1.015)',offset:.65},
+          {transform:'translateY(-3px) scale(1.01)'}
+        ],{duration:400,easing:'cubic-bezier(.2,.75,.25,1)'});
+        clickTimer=setTimeout(go,400);
+        return;
+      }
       const art=link.querySelector('.folder-art');
       art.animate([{transform:'scale(1)'},{transform:'scale(.98)',offset:.2},{transform:'scale(1.02)',offset:.65},{transform:'scale(1)'}],{duration:420,easing:'ease-out'});
       link.querySelector('.papers').animate([{transform:'translateY(0)',opacity:1},{transform:'translateY(-48px)',opacity:1,offset:.7},{transform:'translateY(-52px)',opacity:url?0:1}],{duration:420,easing:'ease-out'});
