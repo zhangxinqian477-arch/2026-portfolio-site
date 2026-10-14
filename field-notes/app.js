@@ -60,6 +60,7 @@ const state = {
   panelTimer: 0,
   closeTimer: 0,
   previewTimer: 0,
+  previewSide: null,
   featuredTimer: 0,
   featuredDismissed: false,
   pointer: null,
@@ -167,6 +168,7 @@ function clearLinkedLocation(id, source = null) {
   state.previewTimer = 0;
   state.hoveredId = null;
   state.hoverSource = null;
+  state.previewSide = null;
   locations.forEach(location => placeButtons.get(location.id)?.classList.remove('is-linked'));
   elements.polaroid.classList.remove('is-visible');
   elements.previewConnector.classList.remove('is-visible');
@@ -175,6 +177,7 @@ function clearLinkedLocation(id, source = null) {
 function showPreview(id, source = 'marker', delay = 130) {
   if (!locationById.has(id)) return;
   window.clearTimeout(state.previewTimer);
+  if (state.hoveredId !== id || state.hoverSource !== source) state.previewSide = null;
   setLinkedLocation(id, source);
   if (state.hoveredId !== id || state.hoverSource !== source) return;
   if (compactLayout.matches) return;
@@ -218,7 +221,8 @@ function positionPreview(id) {
   const outwardLength = Math.max(1, Math.hypot(outwardX, outwardY));
   let directionX = outwardX / outwardLength;
   let directionY = outwardY / outwardLength;
-  const horizontalSign = directionX < 0 ? -1 : 1;
+  const horizontalSign = state.previewSide || (directionX < 0 ? -1 : 1);
+  state.previewSide = horizontalSign;
   directionX = horizontalSign * Math.max(Math.abs(directionX), .62);
   directionY = -Math.max(Math.abs(directionY), .45);
   const previewDirectionLength = Math.hypot(directionX, directionY);
@@ -233,9 +237,6 @@ function positionPreview(id) {
   const viewportMinY = 12 - wrapBounds.top + halfHeight;
   const viewportMaxY = window.innerHeight - 12 - wrapBounds.top - halfHeight;
 
-  if (previewX < viewportMinX || previewX > viewportMaxX) {
-    previewX = point.x - directionX * distance;
-  }
   previewX = Math.max(viewportMinX, Math.min(viewportMaxX, previewX));
   previewY = Math.max(viewportMinY, Math.min(viewportMaxY, previewY));
 
@@ -641,12 +642,14 @@ function attachGlobeInteraction() {
 
   canvas.addEventListener('pointerdown', event => {
     if (!state.globeGroup) return;
-    const canDrag = event.pointerType === 'touch' || (event.pointerType === 'mouse' && event.button === 0);
+    const canDrag = event.pointerType === 'touch' || (event.pointerType === 'mouse' && (event.button === 0 || event.button === 2));
     if (!canDrag) return;
+    event.preventDefault();
     dismissFeatured();
     state.focusAnimation = null;
     state.pointer = {
       id: event.pointerId,
+      button: event.button,
       x: event.clientX,
       y: event.clientY,
       totalX: 0,
@@ -674,9 +677,10 @@ function attachGlobeInteraction() {
   const release = event => {
     if (!state.pointer || event.pointerId !== state.pointer.id) return;
     const totalMovement = Math.hypot(state.pointer.totalX, state.pointer.totalY);
+    const canSelectMarker = event.pointerType === 'touch' || state.pointer.button === 0;
     canvas.releasePointerCapture?.(event.pointerId);
     state.pointer = null;
-    if (totalMovement < 6) {
+    if (canSelectMarker && totalMovement < 6) {
       const markerId = nearestMarkerAt(event.clientX, event.clientY, event.pointerType === 'touch' ? 28 : 24);
       const location = locationById.get(markerId);
       if (location) {
