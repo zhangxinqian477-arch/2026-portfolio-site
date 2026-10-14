@@ -12,6 +12,9 @@ const elements = {
   polaroidImage: document.querySelector('#polaroidImage'),
   polaroidCity: document.querySelector('#polaroidCity'),
   polaroidMeta: document.querySelector('#polaroidMeta'),
+  previewConnector: document.querySelector('#previewConnector'),
+  previewConnectorPath: document.querySelector('#previewConnectorPath'),
+  featuredNote: document.querySelector('#featuredNote'),
   panel: document.querySelector('#notePanel'),
   panelClose: document.querySelector('#panelClose'),
   pageScrim: document.querySelector('#pageScrim'),
@@ -52,11 +55,13 @@ const state = {
   animationFrame: 0,
   lastFrame: performance.now(),
   lastRender: 0,
-  resumeRotationAt: performance.now() + 1800,
+  resumeRotationAt: Number.POSITIVE_INFINITY,
   focusAnimation: null,
   panelTimer: 0,
   closeTimer: 0,
   previewTimer: 0,
+  featuredTimer: 0,
+  featuredDismissed: false,
   pointer: null,
   globeHovered: false,
   webglReady: false
@@ -69,6 +74,30 @@ const markerStemColor = '#f2eee6';
 const markerHeadRadius = .0175;
 const markerStemLength = .041;
 const markerSurfaceOffset = .009;
+const featuredLocationId = 'nanjing';
+const initialGlobeLocation = { lat: 34.2, lng: 117.4 };
+
+function dismissFeatured() {
+  if (state.featuredDismissed) return;
+  state.featuredDismissed = true;
+  window.clearTimeout(state.featuredTimer);
+  elements.featuredNote.classList.remove('is-visible');
+  elements.featuredNote.setAttribute('aria-hidden', 'true');
+  elements.featuredNote.tabIndex = -1;
+  if (!state.pointer && !state.globeHovered && !state.selectedId) {
+    state.resumeRotationAt = performance.now() + 1600;
+  }
+}
+
+function revealFeatured() {
+  if (state.featuredDismissed) return;
+  state.featuredTimer = window.setTimeout(() => {
+    if (state.featuredDismissed) return;
+    elements.featuredNote.setAttribute('aria-hidden', 'false');
+    elements.featuredNote.tabIndex = 0;
+    elements.featuredNote.classList.add('is-visible');
+  }, reducedMotion.matches ? 0 : 520);
+}
 
 function createLocationControls() {
   elements.placeCount.textContent = String(locations.length).padStart(2, '0');
@@ -123,6 +152,7 @@ function createLocationControls() {
 
 function setLinkedLocation(id, source) {
   if (!locationById.has(id)) return;
+  dismissFeatured();
   state.hoveredId = id;
   state.hoverSource = source;
   locations.forEach(location => {
@@ -138,6 +168,7 @@ function clearLinkedLocation(id, source = null) {
   state.hoverSource = null;
   locations.forEach(location => placeButtons.get(location.id)?.classList.remove('is-linked'));
   elements.polaroid.classList.remove('is-visible');
+  elements.previewConnector.classList.remove('is-visible');
 }
 
 function showPreview(id) {
@@ -154,7 +185,10 @@ function showPreview(id) {
     elements.polaroidCity.textContent = `${location.city} · ${location.cityEn}`;
     elements.polaroidMeta.textContent = location.previewMeta;
     positionPreview(id);
-    requestAnimationFrame(() => elements.polaroid.classList.add('is-visible'));
+    requestAnimationFrame(() => {
+      elements.polaroid.classList.add('is-visible');
+      elements.previewConnector.classList.add('is-visible');
+    });
     state.previewTimer = 0;
   }, 130);
 }
@@ -168,16 +202,62 @@ function positionPreview(id) {
   if (!point) return;
   const width = elements.globeWrap.clientWidth;
   const height = elements.globeWrap.clientHeight;
-  const cardWidth = 172;
-  const cardHeight = 165;
-  const cardGap = 104;
-  const preferredLeft = point.x > width / 2
-    ? point.x - cardWidth - cardGap
-    : point.x + cardGap;
-  const left = Math.max(8, Math.min(width - cardWidth - 8, preferredLeft));
-  const top = Math.max(cardHeight * .48, Math.min(height - cardHeight * .42, point.y));
-  elements.polaroid.style.left = `${left}px`;
-  elements.polaroid.style.top = `${top}px`;
+  const wrapBounds = elements.globeWrap.getBoundingClientRect();
+  const cardWidth = 146;
+  const cardHeight = 148;
+  const halfWidth = cardWidth / 2;
+  const halfHeight = cardHeight / 2;
+  const centerX = width / 2;
+  const centerY = height / 2;
+  const outwardX = point.x - centerX;
+  const outwardY = point.y - centerY;
+  const outwardLength = Math.max(1, Math.hypot(outwardX, outwardY));
+  let directionX = outwardX / outwardLength;
+  let directionY = outwardY / outwardLength;
+  const horizontalSign = directionX < 0 ? -1 : 1;
+  directionX = horizontalSign * Math.max(Math.abs(directionX), .62);
+  directionY = -Math.max(Math.abs(directionY), .45);
+  const previewDirectionLength = Math.hypot(directionX, directionY);
+  directionX /= previewDirectionLength;
+  directionY /= previewDirectionLength;
+
+  const distance = 154;
+  let previewX = point.x + directionX * distance;
+  let previewY = point.y + directionY * distance;
+  const viewportMinX = 12 - wrapBounds.left + halfWidth;
+  const viewportMaxX = window.innerWidth - 12 - wrapBounds.left - halfWidth;
+  const viewportMinY = 12 - wrapBounds.top + halfHeight;
+  const viewportMaxY = window.innerHeight - 12 - wrapBounds.top - halfHeight;
+
+  if (previewX < viewportMinX || previewX > viewportMaxX) {
+    previewX = point.x - directionX * distance;
+  }
+  previewX = Math.max(viewportMinX, Math.min(viewportMaxX, previewX));
+  previewY = Math.max(viewportMinY, Math.min(viewportMaxY, previewY));
+
+  elements.polaroid.style.left = `${previewX}px`;
+  elements.polaroid.style.top = `${previewY}px`;
+
+  const vectorX = previewX - point.x;
+  const vectorY = previewY - point.y;
+  const vectorLength = Math.max(1, Math.hypot(vectorX, vectorY));
+  const unitX = vectorX / vectorLength;
+  const unitY = vectorY / vectorLength;
+  const edgeScale = Math.min(
+    (halfWidth - 7) / Math.max(Math.abs(vectorX), .001),
+    (halfHeight - 7) / Math.max(Math.abs(vectorY), .001)
+  );
+  const startX = point.x + unitX * 10;
+  const startY = point.y + unitY * 10;
+  const endX = previewX - vectorX * edgeScale;
+  const endY = previewY - vectorY * edgeScale;
+  const middleX = (startX + endX) / 2 - unitY * 4;
+  const middleY = (startY + endY) / 2 + unitX * 4;
+  elements.previewConnector.setAttribute('viewBox', `0 0 ${width} ${height}`);
+  elements.previewConnectorPath.setAttribute(
+    'd',
+    `M ${startX.toFixed(1)} ${startY.toFixed(1)} Q ${middleX.toFixed(1)} ${middleY.toFixed(1)} ${endX.toFixed(1)} ${endY.toFixed(1)}`
+  );
 }
 
 function renderDetail(location) {
@@ -219,6 +299,7 @@ function renderDetail(location) {
 }
 
 function selectLocation(location, trigger, keyboardSelection = false) {
+  dismissFeatured();
   const alreadyOpen = document.body.classList.contains('panel-open');
   if (state.selectedId === location.id && alreadyOpen) {
     closePanel();
@@ -442,7 +523,7 @@ async function initGlobe() {
     state.camera = camera;
 
     const globeGroup = new THREE.Group();
-    globeGroup.quaternion.copy(orientationForLocation(locations[0]));
+    globeGroup.quaternion.copy(orientationForLocation(initialGlobeLocation));
     scene.add(globeGroup);
     state.globeGroup = globeGroup;
 
@@ -482,9 +563,11 @@ async function initGlobe() {
     attachGlobeInteraction();
     observeGlobeSize();
     state.animationFrame = requestAnimationFrame(renderFrame);
+    revealFeatured();
   } catch (error) {
     console.error('Field Notes globe could not be initialized.', error);
     showGlobeFallback();
+    revealFeatured();
   }
 }
 
@@ -541,6 +624,7 @@ function attachGlobeInteraction() {
 
   elements.globeWrap.addEventListener('pointermove', event => {
     if (event.pointerType !== 'mouse' || state.pointer) return;
+    if (event.target.closest?.('#featuredNote')) return;
     const markerId = nearestMarkerAt(event.clientX, event.clientY);
     elements.globeWrap.classList.toggle('marker-hover', Boolean(markerId));
     if (markerId === state.hoveredId && state.hoverSource === 'marker') return;
@@ -550,6 +634,9 @@ function attachGlobeInteraction() {
 
   canvas.addEventListener('pointerdown', event => {
     if (!state.globeGroup) return;
+    const canDrag = event.pointerType === 'touch' || (event.pointerType === 'mouse' && event.button === 0);
+    if (!canDrag) return;
+    dismissFeatured();
     state.focusAnimation = null;
     state.pointer = {
       id: event.pointerId,
@@ -600,6 +687,10 @@ function attachGlobeInteraction() {
       if (!state.selectedId) state.resumeRotationAt = performance.now() + 2500;
     }
   });
+
+  canvas.addEventListener('contextmenu', event => event.preventDefault());
+  elements.polaroid.addEventListener('contextmenu', event => event.preventDefault());
+  elements.featuredNote.addEventListener('contextmenu', event => event.preventDefault());
 }
 
 function updateMarkerPositions(now) {
@@ -702,6 +793,7 @@ function renderFrame(now) {
     !state.pointer &&
     !state.globeHovered &&
     !state.selectedId &&
+    state.featuredDismissed &&
     now >= state.resumeRotationAt
   ) {
     const angle = -(delta / 100000) * Math.PI * 2;
@@ -724,11 +816,17 @@ function handleMotionPreference() {
   if (reducedMotion.matches) {
     state.resumeRotationAt = Number.POSITIVE_INFINITY;
     state.focusAnimation = null;
-  } else if (!state.selectedId) {
+  } else if (!state.selectedId && state.featuredDismissed) {
     state.resumeRotationAt = performance.now() + 1200;
   }
 }
 
+elements.featuredNote.addEventListener('click', event => {
+  const location = locationById.get(featuredLocationId);
+  if (!location) return;
+  dismissFeatured();
+  selectLocation(location, event.currentTarget, event.detail === 0);
+});
 elements.panelClose.addEventListener('click', () => closePanel());
 elements.pageScrim.addEventListener('click', () => closePanel());
 document.addEventListener('keydown', event => {
