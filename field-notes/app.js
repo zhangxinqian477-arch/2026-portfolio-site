@@ -14,7 +14,6 @@ const elements = {
   polaroidMeta: document.querySelector('#polaroidMeta'),
   previewConnector: document.querySelector('#previewConnector'),
   previewConnectorPath: document.querySelector('#previewConnectorPath'),
-  featuredNote: document.querySelector('#featuredNote'),
   panel: document.querySelector('#notePanel'),
   panelClose: document.querySelector('#panelClose'),
   pageScrim: document.querySelector('#pageScrim'),
@@ -55,16 +54,16 @@ const state = {
   animationFrame: 0,
   lastFrame: performance.now(),
   lastRender: 0,
-  resumeRotationAt: Number.POSITIVE_INFINITY,
+  resumeRotationAt: 0,
   focusAnimation: null,
   panelTimer: 0,
   closeTimer: 0,
   previewTimer: 0,
   previewSide: null,
-  featuredTimer: 0,
-  featuredDismissed: false,
+  onboardingTimers: [],
+  onboardingActive: false,
+  onboardingComplete: false,
   pointer: null,
-  globeHovered: false,
   webglReady: false
 };
 
@@ -75,29 +74,48 @@ const markerStemColor = '#f2eee6';
 const markerHeadRadius = .0175;
 const markerStemLength = .041;
 const markerSurfaceOffset = .009;
-const featuredLocationId = 'nanjing';
 const initialGlobeLocation = { lat: 34.2, lng: 117.4 };
+const onboardingSequence = [
+  { id: 'nanjing', showAt: 300, hideAt: 1050 },
+  { id: 'haerbin', showAt: 550, hideAt: 1325 },
+  { id: 'shenzhen', showAt: 800, hideAt: 1600 }
+];
 
-function dismissFeatured() {
-  if (state.featuredDismissed) return;
-  state.featuredDismissed = true;
-  window.clearTimeout(state.featuredTimer);
-  elements.featuredNote.classList.remove('is-visible');
-  elements.featuredNote.setAttribute('aria-hidden', 'true');
-  elements.featuredNote.tabIndex = -1;
-  if (!state.pointer && !state.globeHovered && !state.selectedId) {
-    state.resumeRotationAt = performance.now() + 1600;
-  }
+function clearOnboardingTimers() {
+  state.onboardingTimers.forEach(timer => window.clearTimeout(timer));
+  state.onboardingTimers = [];
 }
 
-function revealFeatured() {
-  if (state.featuredDismissed) return;
-  state.featuredTimer = window.setTimeout(() => {
-    if (state.featuredDismissed) return;
-    elements.featuredNote.setAttribute('aria-hidden', 'false');
-    elements.featuredNote.tabIndex = 0;
-    elements.featuredNote.classList.add('is-visible');
-  }, reducedMotion.matches ? 0 : 520);
+function endOnboarding() {
+  if (state.onboardingComplete) return;
+  clearOnboardingTimers();
+  onboardingSequence.forEach(item => markerButtons.get(item.id)?.classList.remove('is-onboarding'));
+  state.onboardingActive = false;
+  state.onboardingComplete = true;
+}
+
+function startOnboarding() {
+  if (state.onboardingComplete || state.onboardingActive) return;
+  if (reducedMotion.matches || !state.webglReady) {
+    state.onboardingComplete = true;
+    return;
+  }
+
+  state.onboardingActive = true;
+  onboardingSequence.forEach(item => {
+    state.onboardingTimers.push(window.setTimeout(() => {
+      if (!state.onboardingActive) return;
+      markerButtons.get(item.id)?.classList.add('is-onboarding');
+    }, item.showAt));
+    state.onboardingTimers.push(window.setTimeout(() => {
+      markerButtons.get(item.id)?.classList.remove('is-onboarding');
+    }, item.hideAt));
+  });
+  state.onboardingTimers.push(window.setTimeout(() => {
+    clearOnboardingTimers();
+    state.onboardingActive = false;
+    state.onboardingComplete = true;
+  }, 1800));
 }
 
 function createLocationControls() {
@@ -134,7 +152,12 @@ function createLocationControls() {
     markerButton.setAttribute('aria-expanded', 'false');
     markerButton.tabIndex = -1;
     markerButton.style.setProperty('--marker-color', markerColor);
-    markerButton.innerHTML = `<span class="marker-label"><strong>${location.city}</strong><small>${location.cityEn}</small></span>`;
+    markerButton.innerHTML = `
+      <span class="marker-label"><strong>${location.city}</strong><small>${location.cityEn}</small></span>
+      <span class="marker-onboarding" aria-hidden="true">
+        <img src="${location.cover}" alt="" draggable="false">
+        <span class="marker-onboarding-copy"><strong>${location.city}</strong><small>${location.cityEn}</small></span>
+      </span>`;
     markerButton.addEventListener('pointerenter', event => {
       if (event.pointerType === 'mouse') showPreview(location.id);
     });
@@ -154,9 +177,10 @@ function createLocationControls() {
 function setLinkedLocation(id, source) {
   if (!locationById.has(id)) return;
   if (state.selectedId && source !== 'selected') return;
-  dismissFeatured();
+  endOnboarding();
   state.hoveredId = id;
   state.hoverSource = source;
+  state.resumeRotationAt = Number.POSITIVE_INFINITY;
   locations.forEach(location => {
     placeButtons.get(location.id)?.classList.toggle('is-linked', location.id === id);
   });
@@ -172,6 +196,9 @@ function clearLinkedLocation(id, source = null) {
   locations.forEach(location => placeButtons.get(location.id)?.classList.remove('is-linked'));
   elements.polaroid.classList.remove('is-visible');
   elements.previewConnector.classList.remove('is-visible');
+  if (!state.pointer && !state.selectedId && !reducedMotion.matches) {
+    state.resumeRotationAt = performance.now() + 900;
+  }
 }
 
 function showPreview(id, source = 'marker', delay = 130) {
@@ -304,7 +331,7 @@ function renderDetail(location) {
 }
 
 function selectLocation(location, trigger, keyboardSelection = false) {
-  dismissFeatured();
+  endOnboarding();
   const alreadyOpen = document.body.classList.contains('panel-open');
   if (state.selectedId === location.id && alreadyOpen) {
     closePanel();
@@ -570,11 +597,10 @@ async function initGlobe() {
     attachGlobeInteraction();
     observeGlobeSize();
     state.animationFrame = requestAnimationFrame(renderFrame);
-    revealFeatured();
+    startOnboarding();
   } catch (error) {
     console.error('Field Notes globe could not be initialized.', error);
     showGlobeFallback();
-    revealFeatured();
   }
 }
 
@@ -613,25 +639,14 @@ function nearestMarkerAt(clientX, clientY, hitRadius = 24) {
 function attachGlobeInteraction() {
   const canvas = elements.canvas;
 
-  elements.globeWrap.addEventListener('pointerenter', event => {
-    if (event.pointerType !== 'mouse') return;
-    state.globeHovered = true;
-    state.resumeRotationAt = Number.POSITIVE_INFINITY;
-  });
-
   elements.globeWrap.addEventListener('pointerleave', event => {
     if (event.pointerType !== 'mouse') return;
     if (state.hoverSource === 'marker') hidePreview(state.hoveredId);
     elements.globeWrap.classList.remove('marker-hover');
-    state.globeHovered = false;
-    if (!state.pointer && !state.selectedId) {
-      state.resumeRotationAt = performance.now() + 900;
-    }
   });
 
   elements.globeWrap.addEventListener('pointermove', event => {
     if (event.pointerType !== 'mouse' || state.pointer) return;
-    if (event.target.closest?.('#featuredNote')) return;
     const markerId = nearestMarkerAt(event.clientX, event.clientY);
     elements.globeWrap.classList.toggle('marker-hover', Boolean(markerId));
     if (state.selectedId) return;
@@ -645,7 +660,7 @@ function attachGlobeInteraction() {
     const canDrag = event.pointerType === 'touch' || (event.pointerType === 'mouse' && (event.button === 0 || event.button === 2));
     if (!canDrag) return;
     event.preventDefault();
-    dismissFeatured();
+    endOnboarding();
     state.focusAnimation = null;
     state.pointer = {
       id: event.pointerId,
@@ -701,7 +716,6 @@ function attachGlobeInteraction() {
 
   canvas.addEventListener('contextmenu', event => event.preventDefault());
   elements.polaroid.addEventListener('contextmenu', event => event.preventDefault());
-  elements.featuredNote.addEventListener('contextmenu', event => event.preventDefault());
 }
 
 function updateMarkerPositions(now) {
@@ -813,9 +827,7 @@ function renderFrame(now) {
   } else if (
     !reducedMotion.matches &&
     !state.pointer &&
-    !state.globeHovered &&
     !state.selectedId &&
-    state.featuredDismissed &&
     now >= state.resumeRotationAt
   ) {
     const angle = -(delta / 100000) * Math.PI * 2;
@@ -836,19 +848,14 @@ function showGlobeFallback() {
 
 function handleMotionPreference() {
   if (reducedMotion.matches) {
+    endOnboarding();
     state.resumeRotationAt = Number.POSITIVE_INFINITY;
     state.focusAnimation = null;
-  } else if (!state.selectedId && state.featuredDismissed) {
+  } else if (!state.selectedId) {
     state.resumeRotationAt = performance.now() + 1200;
   }
 }
 
-elements.featuredNote.addEventListener('click', event => {
-  const location = locationById.get(featuredLocationId);
-  if (!location) return;
-  dismissFeatured();
-  selectLocation(location, event.currentTarget, event.detail === 0);
-});
 elements.panelClose.addEventListener('click', () => closePanel());
 elements.pageScrim.addEventListener('click', () => closePanel());
 document.addEventListener('keydown', event => {
@@ -861,6 +868,7 @@ reducedMotion.addEventListener('change', handleMotionPreference);
 compactLayout.addEventListener('change', () => hidePreview(state.hoveredId));
 window.addEventListener('pagehide', event => {
   if (event.persisted) return;
+  clearOnboardingTimers();
   cancelAnimationFrame(state.animationFrame);
   state.animationFrame = 0;
   state.resizeObserver?.disconnect();
