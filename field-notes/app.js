@@ -375,6 +375,7 @@ function createMarkerVisual(location, index) {
   );
   selectionRing.position.z = .006;
   group.add(selectionRing);
+  group.scale.setScalar(.58);
   state.globeGroup.add(group);
 
   markerVisuals.set(location.id, {
@@ -383,7 +384,7 @@ function createMarkerVisual(location, index) {
     group,
     selectionRing,
     markerTilt,
-    scale: 1,
+    scale: .58,
     lift: 0,
     anchor: normal.clone().multiplyScalar(globeRadius + .12)
   });
@@ -543,8 +544,8 @@ function updateMarkerPositions() {
 
     const active = state.selectedId === location.id;
     const hovered = state.hoveredId === location.id;
-    const targetLift = active ? .027 : hovered ? .014 : 0;
-    const targetScale = active ? 1.16 : hovered ? 1.09 : 1;
+    const targetLift = active ? .012 : hovered ? .006 : 0;
+    const targetScale = active ? .72 : hovered ? .64 : .58;
     visual.lift += (targetLift - visual.lift) * .18;
     visual.scale += (targetScale - visual.scale) * .18;
     visual.group.position.copy(visual.normal).multiplyScalar(globeRadius + visual.lift);

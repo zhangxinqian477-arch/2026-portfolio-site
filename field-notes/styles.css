@@ -304,19 +304,20 @@ a:focus-visible {
 }
 
 .polaroid {
-  background: #fffdf7;
-  border: 1px solid rgba(39, 49, 58, .18);
-  box-shadow: 0 15px 35px rgba(55, 69, 71, .16);
+  background: #fffaf0;
+  border: 0;
+  clip-path: polygon(0% 4%, 4% 0%, 8% 4%, 12% 0%, 16% 4%, 20% 0%, 24% 4%, 28% 0%, 32% 4%, 36% 0%, 40% 4%, 44% 0%, 48% 4%, 52% 0%, 56% 4%, 60% 0%, 64% 4%, 68% 0%, 72% 4%, 76% 0%, 80% 4%, 84% 0%, 88% 4%, 92% 0%, 96% 4%, 100% 0%, 96% 4%, 100% 8%, 96% 12%, 100% 16%, 96% 20%, 100% 24%, 96% 28%, 100% 32%, 96% 36%, 100% 40%, 96% 44%, 100% 48%, 96% 52%, 100% 56%, 96% 60%, 100% 64%, 96% 68%, 100% 72%, 96% 76%, 100% 80%, 96% 84%, 100% 88%, 96% 92%, 100% 96%, 96% 100%, 92% 96%, 88% 100%, 84% 96%, 80% 100%, 76% 96%, 72% 100%, 68% 96%, 64% 100%, 60% 96%, 56% 100%, 52% 96%, 48% 100%, 44% 96%, 40% 100%, 36% 96%, 32% 100%, 28% 96%, 24% 100%, 20% 96%, 16% 100%, 12% 96%, 8% 100%, 4% 96%, 0% 100%, 0% 96%, 4% 92%, 0% 88%, 4% 84%, 0% 80%, 4% 76%, 0% 72%, 4% 68%, 0% 64%, 4% 60%, 0% 56%, 4% 52%, 0% 48%, 4% 44%, 0% 40%, 4% 36%, 0% 32%, 4% 28%, 0% 24%, 4% 20%, 0% 16%, 4% 12%, 0% 8%, 4% 4%);
+  filter: drop-shadow(0 14px 18px rgba(55, 69, 71, .17));
   left: 0;
   opacity: 0;
-  padding: 8px 8px 10px;
+  padding: 12px 12px 14px;
   pointer-events: none;
   position: absolute;
   top: 0;
   transform: translate(12px, -50%) rotate(-2deg) scale(.92);
   transform-origin: 0 60%;
   transition: opacity 180ms ease, transform 220ms cubic-bezier(.2, .8, .2, 1);
-  width: 154px;
+  width: 164px;
   z-index: 15;
 }
 
@@ -328,6 +329,7 @@ a:focus-visible {
 .polaroid-image-wrap {
   aspect-ratio: 4 / 3;
   background: #e4ece9;
+  border: 1px solid rgba(78, 115, 166, .22);
   overflow: hidden;
 }
 
