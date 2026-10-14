@@ -57,6 +57,7 @@ const state = {
   panelTimer: 0,
   closeTimer: 0,
   pointer: null,
+  globeHovered: false,
   webglReady: false
 };
 
@@ -373,7 +374,7 @@ function createMarkerVisual(location, index) {
     new THREE.MeshBasicMaterial({
       color: markerGray,
       transparent: true,
-      opacity: .22,
+      opacity: .13,
       depthWrite: false,
       side: THREE.DoubleSide
     })
@@ -391,7 +392,7 @@ function createMarkerVisual(location, index) {
     new THREE.LineBasicMaterial({
       color: markerGray,
       transparent: true,
-      opacity: .38,
+      opacity: .22,
       depthWrite: false
     })
   );
@@ -401,6 +402,7 @@ function createMarkerVisual(location, index) {
   const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
     map: defaultTexture,
     transparent: true,
+    opacity: .58,
     depthTest: false,
     depthWrite: false,
     toneMapped: false
@@ -423,6 +425,7 @@ function createMarkerVisual(location, index) {
     accentTexture,
     emphasized: false,
     scale: 1,
+    opacity: .58,
     lift: 0,
     anchor: displayPoint.clone()
   });
@@ -521,6 +524,20 @@ function observeGlobeSize() {
 function attachGlobeInteraction() {
   const canvas = elements.canvas;
 
+  elements.globeWrap.addEventListener('pointerenter', event => {
+    if (event.pointerType !== 'mouse') return;
+    state.globeHovered = true;
+    state.resumeRotationAt = Number.POSITIVE_INFINITY;
+  });
+
+  elements.globeWrap.addEventListener('pointerleave', event => {
+    if (event.pointerType !== 'mouse') return;
+    state.globeHovered = false;
+    if (!state.pointer && !state.selectedId) {
+      state.resumeRotationAt = performance.now() + 900;
+    }
+  });
+
   canvas.addEventListener('pointerdown', event => {
     if (!state.globeGroup) return;
     state.focusAnimation = null;
@@ -585,17 +602,20 @@ function updateMarkerPositions() {
     const emphasized = active || hovered;
     const targetLift = active ? .012 : hovered ? .006 : 0;
     const targetScale = active ? 1.12 : hovered ? 1.07 : 1;
+    const targetOpacity = active ? .94 : hovered ? .88 : .58;
     visual.lift += (targetLift - visual.lift) * .18;
     visual.scale += (targetScale - visual.scale) * .18;
+    visual.opacity += (targetOpacity - visual.opacity) * .18;
     visual.anchor.copy(visual.normal)
       .multiplyScalar(globeRadius + .026 + visual.lift)
       .addScaledVector(visual.bodyDirection, .052);
     visual.sprite.position.copy(visual.anchor);
     visual.sprite.scale.set(.105 * visual.scale, .142 * visual.scale, 1);
-    visual.selectionRing.material.opacity += ((active ? .62 : hovered ? .44 : .22) - visual.selectionRing.material.opacity) * .2;
+    visual.sprite.material.opacity = visual.opacity;
+    visual.selectionRing.material.opacity += ((active ? .48 : hovered ? .34 : .13) - visual.selectionRing.material.opacity) * .2;
     visual.selectionRing.material.color.set(emphasized ? visual.color : markerGray);
     visual.leader.material.color.set(emphasized ? visual.color : markerGray);
-    visual.leader.material.opacity = emphasized ? .62 : .38;
+    visual.leader.material.opacity = active ? .5 : hovered ? .42 : .22;
     if (visual.emphasized !== emphasized) {
       visual.sprite.material.map = emphasized ? visual.accentTexture : visual.defaultTexture;
       visual.sprite.material.needsUpdate = true;
@@ -660,6 +680,7 @@ function renderFrame(now) {
   } else if (
     !reducedMotion.matches &&
     !state.pointer &&
+    !state.globeHovered &&
     !state.selectedId &&
     now >= state.resumeRotationAt
   ) {
