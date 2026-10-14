@@ -1,0 +1,21 @@
+{
+  "cover": "DSC00169.JPG",
+  "gallery": [
+    {
+      "output": "01.webp",
+      "source": "DSC00133.JPG"
+    },
+    {
+      "output": "02.webp",
+      "source": "DSC00149.JPG"
+    },
+    {
+      "output": "03.webp",
+      "source": "DSC00153.JPG"
+    },
+    {
+      "output": "04.webp",
+      "source": "DSC00405.JPG"
+    }
+  ]
+}

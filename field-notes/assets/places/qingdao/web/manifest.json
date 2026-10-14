@@ -13,5 +13,15 @@
       "output": "03.webp",
       "source": "微信图片_20261013234829_31_1.jpg"
     }
+  ],
+  "guides": [
+    {
+      "output": "04.webp",
+      "source": "111.png"
+    },
+    {
+      "output": "05.webp",
+      "source": "111.1.png"
+    }
   ]
 }

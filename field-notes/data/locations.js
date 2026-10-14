@@ -6,7 +6,6 @@ export const locations = Object.freeze([
     country: 'Jiangsu, China',
     lat: 32.0603,
     lng: 118.7969,
-    markerAngle: -45,
     date: 'TRAVEL PHOTOGRAPHY',
     previewMeta: 'Travel photography · 8 photos',
     title: '光落在树影、水面和旧城的轮廓之间',
@@ -32,7 +31,6 @@ export const locations = Object.freeze([
     country: 'Jiangsu, China',
     lat: 31.4912,
     lng: 120.3119,
-    markerAngle: 115,
     date: 'TRAVEL PHOTOGRAPHY',
     previewMeta: 'Travel photography · 4 photos',
     title: '水面落日与窗边的片刻',
@@ -54,9 +52,8 @@ export const locations = Object.freeze([
     country: 'Shandong, China',
     lat: 36.0671,
     lng: 120.3826,
-    markerAngle: 55,
     date: 'TRAVEL PHOTOGRAPHY',
-    previewMeta: 'Travel photography · 4 photos',
+    previewMeta: 'Travel photography · 4 photos + 2 guides',
     title: '海岸线把日常拉得很长',
     description: '青岛的一组海边观察：远处的城市、退潮后的沙滩、海面上的船，以及沿岸层层展开的生活。',
     cover: './assets/places/qingdao/web/cover.webp',
@@ -65,7 +62,10 @@ export const locations = Object.freeze([
       ['01.webp', '沿海远眺', '青岛海岸线和远处城市'],
       ['02.webp', '海面上的船', '青岛海面上的船只'],
       ['03.webp', '沿岸展开的城市', '青岛海湾与沿岸红屋顶建筑']
-    ].map(([file, caption, alt]) => ({ src: `./assets/places/qingdao/web/${file}`, type: 'photo', caption, alt })),
+    ].map(([file, caption, alt]) => ({ src: `./assets/places/qingdao/web/${file}`, type: 'photo', caption, alt })).concat([
+      { src: './assets/places/qingdao/web/04.webp', type: 'guide', caption: '沿海看海指南', alt: '青岛沿海看海地点攻略图' },
+      { src: './assets/places/qingdao/web/05.webp', type: 'guide', caption: '旅行路线参考', alt: '青岛市区与沿海旅行路线攻略图' }
+    ]),
     camera: null,
     demo: false
   },
@@ -76,7 +76,6 @@ export const locations = Object.freeze([
     country: 'Shanxi, China',
     lat: 40.0903,
     lng: 113.2953,
-    markerAngle: -115,
     date: 'TRAVEL PHOTOGRAPHY',
     previewMeta: 'Travel photography · 6 photos',
     title: '木构、壁画与古城里的时间',
@@ -100,19 +99,20 @@ export const locations = Object.freeze([
     country: 'Shaanxi, China',
     lat: 34.3416,
     lng: 108.9398,
-    markerAngle: -70,
-    date: '示例内容',
-    previewMeta: 'Photo note coming soon',
-    title: '城墙转角留下的光和风',
-    description: '这里将记录西安的一段散步、一个空间细节，或一张回去之后仍然记得的照片。图片补充后即可替换当前示例。',
-    cover: './assets/demo/xian-cover.svg',
-    coverAlt: '西安城墙与街道的示例旅行插画',
+    date: 'TRAVEL PHOTOGRAPHY',
+    previewMeta: 'Travel photography · 5 photos',
+    title: '城门、屋檐与雪后的城市边缘',
+    description: '西安的一组建筑与冬日记录：从永宁门的正面秩序、城墙上的屋檐与灯笼，到雪后城郊安静的灰白层次。',
+    cover: './assets/places/xian/web/cover.webp',
+    coverAlt: '西安永宁门与城墙建筑的旅行摄影',
     assets: [
-      { src: './assets/demo/xian-detail-1.svg', type: 'photo', caption: '示例图片 · 城墙边', alt: '西安城墙边的示例旅行插画' },
-      { src: './assets/demo/xian-detail-2.svg', type: 'guide', caption: '示例图片 · 沿途小物', alt: '西安沿途小物的示例旅行插画' }
+      { src: './assets/places/xian/web/01.webp', type: 'photo', caption: '城市里的钟楼', alt: '西安城市街道与传统钟楼建筑' },
+      { src: './assets/places/xian/web/02.webp', type: 'photo', caption: '城墙与灯笼', alt: '西安城墙、屋檐与红色灯笼' },
+      { src: './assets/places/xian/web/03.webp', type: 'photo', caption: '屋檐向远处展开', alt: '西安城墙建筑屋檐和成排灯笼' },
+      { src: './assets/places/xian/web/04.webp', type: 'photo', caption: '雪后的城市边缘', alt: '西安雪后树木、院落与远处建筑' }
     ],
     camera: null,
-    demo: true
+    demo: false
   },
   {
     id: 'haerbin',
@@ -121,7 +121,6 @@ export const locations = Object.freeze([
     country: 'Heilongjiang, China',
     lat: 45.8038,
     lng: 126.5349,
-    markerAngle: 15,
     date: 'TRAVEL PHOTOGRAPHY',
     previewMeta: 'Travel photography · 3 photos',
     title: '冰雪让城市的曲线更清楚',
@@ -142,7 +141,6 @@ export const locations = Object.freeze([
     country: 'Guangdong, China',
     lat: 22.5431,
     lng: 114.0579,
-    markerAngle: 160,
     date: 'TRAVEL PHOTOGRAPHY',
     previewMeta: 'Travel photography · 4 photos',
     title: '海面与城市一起进入傍晚',

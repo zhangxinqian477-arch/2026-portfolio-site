@@ -155,7 +155,7 @@ a:focus-visible {
   display: flex;
   height: 100svh;
   min-height: 620px;
-  overflow: hidden;
+  overflow: clip;
   position: relative;
 }
 
@@ -240,6 +240,10 @@ a:focus-visible {
   cursor: grabbing;
 }
 
+.globe-wrap.marker-hover #globeCanvas {
+  cursor: pointer;
+}
+
 .globe-shadow {
   background: rgba(77, 111, 111, .11);
   border-radius: 50%;
@@ -281,31 +285,79 @@ a:focus-visible {
   background: transparent;
   border: 0;
   border-radius: 50%;
-  color: #a5adaa;
+  color: var(--marker-color, var(--coral));
   cursor: pointer;
-  height: 64px;
-  margin: -32px 0 0 -32px;
+  height: 44px;
+  margin: -22px 0 0 -22px;
   opacity: 0;
   padding: 0;
   pointer-events: none;
   position: absolute;
   transition: opacity 120ms ease;
-  width: 64px;
-}
-
-.marker-button.is-linked,
-.marker-button[aria-expanded="true"] {
-  color: var(--marker-color, var(--coral));
+  width: 44px;
 }
 
 .marker-button.is-visible {
   opacity: 1;
-  pointer-events: auto;
+  pointer-events: none;
 }
 
 .marker-button:focus-visible {
   outline: 1px solid currentColor;
-  outline-offset: -8px;
+  outline-offset: -5px;
+}
+
+.marker-label {
+  align-items: flex-start;
+  background: rgba(255, 255, 255, .76);
+  border: 1px solid rgba(78, 115, 166, .1);
+  border-radius: 8px;
+  color: #344553;
+  display: flex;
+  flex-direction: column;
+  left: 36px;
+  opacity: 0;
+  padding: 5px 8px 4px;
+  pointer-events: none;
+  position: absolute;
+  text-align: left;
+  top: 50%;
+  transform: translate(-4px, -44%);
+  transition: opacity 190ms ease-out, transform 210ms cubic-bezier(.2, .75, .25, 1);
+  white-space: nowrap;
+}
+
+.marker-label strong {
+  font-family: var(--font-cjk);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.marker-label small {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1.25;
+}
+
+.marker-button.is-linked .marker-label,
+.marker-button:focus-visible .marker-label {
+  opacity: 1;
+  transform: translate(0, -50%);
+}
+
+.marker-button.label-left .marker-label {
+  align-items: flex-end;
+  left: auto;
+  right: 36px;
+  text-align: right;
+  transform: translate(4px, -44%);
+}
+
+.marker-button.label-left.is-linked .marker-label,
+.marker-button.label-left:focus-visible .marker-label {
+  transform: translate(0, -50%);
 }
 
 .polaroid {
@@ -763,6 +815,17 @@ body.panel-open .note-panel {
 
 .gallery figure:nth-child(even) {
   padding-top: 22px;
+}
+
+.gallery figure.is-guide {
+  grid-column: 1 / -1;
+  padding-top: 0;
+}
+
+.gallery figure.is-guide img {
+  aspect-ratio: auto;
+  background: #f3f5f2;
+  object-fit: contain;
 }
 
 .camera-note {
