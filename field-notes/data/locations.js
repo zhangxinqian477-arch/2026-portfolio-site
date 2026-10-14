@@ -3,120 +3,158 @@ export const locations = Object.freeze([
     id: 'nanjing',
     city: '南京',
     cityEn: 'Nanjing',
-    country: 'China',
+    country: 'Jiangsu, China',
     lat: 32.0603,
     lng: 118.7969,
-    date: '示例内容',
-    previewMeta: 'Demo note',
-    title: '树影落在慢下来的街道',
-    description: '示例文案：这里会放你在南京留下的一句真实观察。替换照片时，也可以把攻略、票根或设备体验自然地穿插进来。',
-    cover: './assets/demo/nanjing-cover.svg',
-    coverAlt: '南京街道与树影的示例旅行插画',
+    markerAngle: -28,
+    date: 'TRAVEL PHOTOGRAPHY',
+    previewMeta: 'Travel photography · 8 photos',
+    title: '光落在树影、水面和旧城的轮廓之间',
+    description: '南京的一组旅行摄影：从梧桐路、秋日湖面，到城墙远眺与傍晚水光。城市的层次藏在不同季节和光线里。',
+    cover: './assets/places/nanjing/web/cover.webp',
+    coverAlt: '南京秋日湖面与岸边树木的旅行摄影',
     assets: [
-      {
-        src: './assets/demo/nanjing-detail-1.svg',
-        type: 'photo',
-        caption: '示例图片 · 街角',
-        alt: '南京街角的示例旅行插画'
-      },
-      {
-        src: './assets/demo/nanjing-detail-2.svg',
-        type: 'artifact',
-        caption: '示例图片 · 沿途小物',
-        alt: '南京沿途小物的示例旅行插画'
-      }
-    ],
+      ['01.webp', '梧桐路', '南京梧桐树下的街道'],
+      ['02.webp', '城市远眺', '从高处远眺南京城市建筑'],
+      ['03.webp', '檐角与远景', '南京传统建筑檐角与城市远景'],
+      ['04.webp', '湖面晚舟', '傍晚湖面上的船与水光'],
+      ['05.webp', '金色水光', '夕阳照在水面形成金色倒影'],
+      ['06.webp', '树与倒影', '树木与水面倒影'],
+      ['07.webp', '花影与阳台', '花朵映衬下的建筑阳台']
+    ].map(([file, caption, alt]) => ({ src: `./assets/places/nanjing/web/${file}`, type: 'photo', caption, alt })),
     camera: null,
-    demo: true
+    demo: false
   },
   {
-    id: 'shenzhen',
-    city: '深圳',
-    cityEn: 'Shenzhen',
-    country: 'China',
-    lat: 22.5431,
-    lng: 114.0579,
-    date: '示例内容',
-    previewMeta: 'Demo note',
-    title: '海风经过密集生长的街道',
-    description: '示例文案：这里会放你在深圳留下的一段真实观察。照片、路线、展览或偶然遇见的城市细节，都可以整理成一则短记录。',
-    cover: './assets/demo/shenzhen-cover.svg',
-    coverAlt: '深圳城市街道的示例旅行插画',
+    id: 'wuxi',
+    city: '无锡',
+    cityEn: 'Wuxi',
+    country: 'Jiangsu, China',
+    lat: 31.4912,
+    lng: 120.3119,
+    markerAngle: 36,
+    date: 'TRAVEL PHOTOGRAPHY',
+    previewMeta: 'Travel photography · 4 photos',
+    title: '水面落日与窗边的片刻',
+    description: '无锡的旅行摄影围绕水、夕阳和飞鸟展开：有远处的岛与船，也有隔着窗框看见的安静一刻。',
+    cover: './assets/places/wuxi/web/cover.webp',
+    coverAlt: '无锡水面夕阳、飞鸟与船的旅行摄影',
     assets: [
-      {
-        src: './assets/demo/shenzhen-detail-1.svg',
-        type: 'photo',
-        caption: '示例图片 · 城市切片',
-        alt: '深圳城市切片的示例旅行插画'
-      },
-      {
-        src: './assets/demo/shenzhen-detail-2.svg',
-        type: 'note',
-        caption: '示例图片 · 海风与街道',
-        alt: '深圳海风与街道的示例旅行插画'
-      }
-    ],
+      ['01.webp', '树影里的水光', '从树木之间望见的金色水面'],
+      ['02.webp', '夕阳、飞鸟与亭子', '夕阳和飞鸟组成的旅行摄影拼图'],
+      ['03.webp', '窗框里的湖面', '透过室内窗框望见的湖面']
+    ].map(([file, caption, alt]) => ({ src: `./assets/places/wuxi/web/${file}`, type: 'photo', caption, alt })),
     camera: null,
-    demo: true
+    demo: false
   },
   {
     id: 'qingdao',
     city: '青岛',
     cityEn: 'Qingdao',
-    country: 'China',
+    country: 'Shandong, China',
     lat: 36.0671,
     lng: 120.3826,
-    date: '示例内容',
-    previewMeta: 'Demo note',
-    title: '风把海面吹成不同的蓝',
-    description: '示例文案：这里会收下一段很短的海边记忆。内容可以是照片、散步路线，也可以只是当时注意到的一件小事。',
-    cover: './assets/demo/qingdao-cover.svg',
-    coverAlt: '青岛海岸与红屋顶的示例旅行插画',
+    markerAngle: 12,
+    date: 'TRAVEL PHOTOGRAPHY',
+    previewMeta: 'Travel photography · 4 photos',
+    title: '海岸线把日常拉得很长',
+    description: '青岛的一组海边观察：远处的城市、退潮后的沙滩、海面上的船，以及沿岸层层展开的生活。',
+    cover: './assets/places/qingdao/web/cover.webp',
+    coverAlt: '青岛沙滩与远处城市海岸线的旅行摄影',
     assets: [
-      {
-        src: './assets/demo/qingdao-detail-1.svg',
-        type: 'photo',
-        caption: '示例图片 · 海岸线',
-        alt: '青岛海岸线的示例旅行插画'
-      },
-      {
-        src: './assets/demo/qingdao-detail-2.svg',
-        type: 'note',
-        caption: '示例图片 · 下午四点',
-        alt: '青岛海边午后的示例旅行插画'
-      }
-    ],
+      ['01.webp', '沿海远眺', '青岛海岸线和远处城市'],
+      ['02.webp', '海面上的船', '青岛海面上的船只'],
+      ['03.webp', '沿岸展开的城市', '青岛海湾与沿岸红屋顶建筑']
+    ].map(([file, caption, alt]) => ({ src: `./assets/places/qingdao/web/${file}`, type: 'photo', caption, alt })),
     camera: null,
-    demo: true
+    demo: false
+  },
+  {
+    id: 'datong',
+    city: '大同',
+    cityEn: 'Datong',
+    country: 'Shanxi, China',
+    lat: 40.0903,
+    lng: 113.2953,
+    markerAngle: 24,
+    date: 'TRAVEL PHOTOGRAPHY',
+    previewMeta: 'Travel photography · 6 photos',
+    title: '木构、壁画与古城里的时间',
+    description: '大同的一组建筑与细节记录：寺院、木塔、梁柱、壁画和城门，让时间在结构与颜色里被看见。',
+    cover: './assets/places/datong/web/cover.webp',
+    coverAlt: '大同古建筑院落与木构细节的旅行摄影',
+    assets: [
+      ['01.webp', '古建远望', '大同古建筑与天空'],
+      ['02.webp', '塔与檐', '大同古塔和层叠屋檐'],
+      ['03.webp', '木构细节', '传统建筑梁柱与彩绘细节'],
+      ['04.webp', '壁画的颜色', '大同古建筑内的壁画细节'],
+      ['05.webp', '穿过城门', '大同古城门洞与街景']
+    ].map(([file, caption, alt]) => ({ src: `./assets/places/datong/web/${file}`, type: 'photo', caption, alt })),
+    camera: null,
+    demo: false
   },
   {
     id: 'xian',
     city: '西安',
     cityEn: "Xi'an",
-    country: 'China',
+    country: 'Shaanxi, China',
     lat: 34.3416,
     lng: 108.9398,
+    markerAngle: -20,
     date: '示例内容',
-    previewMeta: 'Demo note',
+    previewMeta: 'Photo note coming soon',
     title: '城墙转角留下的光和风',
-    description: '示例文案：这里可以记录西安的一段散步、一个空间细节，或一张回去之后仍然记得的照片。真正上线前会替换为你的实际内容。',
+    description: '这里将记录西安的一段散步、一个空间细节，或一张回去之后仍然记得的照片。图片补充后即可替换当前示例。',
     cover: './assets/demo/xian-cover.svg',
     coverAlt: '西安城墙与街道的示例旅行插画',
     assets: [
-      {
-        src: './assets/demo/xian-detail-1.svg',
-        type: 'photo',
-        caption: '示例图片 · 城墙边',
-        alt: '西安城墙边的示例旅行插画'
-      },
-      {
-        src: './assets/demo/xian-detail-2.svg',
-        type: 'guide',
-        caption: '示例图片 · 沿途小物',
-        alt: '西安沿途小物的示例旅行插画'
-      }
+      { src: './assets/demo/xian-detail-1.svg', type: 'photo', caption: '示例图片 · 城墙边', alt: '西安城墙边的示例旅行插画' },
+      { src: './assets/demo/xian-detail-2.svg', type: 'guide', caption: '示例图片 · 沿途小物', alt: '西安沿途小物的示例旅行插画' }
     ],
     camera: null,
     demo: true
+  },
+  {
+    id: 'haerbin',
+    city: '哈尔滨',
+    cityEn: 'Harbin',
+    country: 'Heilongjiang, China',
+    lat: 45.8038,
+    lng: 126.5349,
+    markerAngle: 4,
+    date: 'TRAVEL PHOTOGRAPHY',
+    previewMeta: 'Travel photography · 3 photos',
+    title: '冰雪让城市的曲线更清楚',
+    description: '哈尔滨的冬日旅行摄影：雪地里的现代建筑、手作小雪人，以及夕阳照亮的桥与冰面。',
+    cover: './assets/places/haerbin/web/cover.webp',
+    coverAlt: '哈尔滨雪地中的现代建筑与人物旅行摄影',
+    assets: [
+      ['01.webp', '雪地里的小雪人', '哈尔滨冬日雪人与旅行片段拼图'],
+      ['02.webp', '夕阳下的桥与冰面', '哈尔滨夕阳照亮桥梁与冰雪']
+    ].map(([file, caption, alt]) => ({ src: `./assets/places/haerbin/web/${file}`, type: 'photo', caption, alt })),
+    camera: null,
+    demo: false
+  },
+  {
+    id: 'shenzhen',
+    city: '深圳',
+    cityEn: 'Shenzhen',
+    country: 'Guangdong, China',
+    lat: 22.5431,
+    lng: 114.0579,
+    markerAngle: -8,
+    date: 'TRAVEL PHOTOGRAPHY',
+    previewMeta: 'Travel photography · 4 photos',
+    title: '海面与城市一起进入傍晚',
+    description: '从山海之间望向深圳：落日、天际线、跨海桥和压低的云，组成城市另一种缓慢的节奏。',
+    cover: './assets/places/shenzhen/web/cover.webp',
+    coverAlt: '深圳海边天际线与夕阳的旅行摄影',
+    assets: [
+      ['01.webp', '海面落日', '深圳海面上的夕阳'],
+      ['02.webp', '水与桥', '深圳水面与远处跨海桥'],
+      ['03.webp', '云压向海面', '深圳海边低垂的云层']
+    ].map(([file, caption, alt]) => ({ src: `./assets/places/shenzhen/web/${file}`, type: 'photo', caption, alt })),
+    camera: null,
+    demo: false
   }
 ]);

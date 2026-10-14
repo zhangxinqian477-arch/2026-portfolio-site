@@ -98,12 +98,6 @@ function createLocationControls() {
     markerButton.setAttribute('aria-expanded', 'false');
     markerButton.tabIndex = -1;
     markerButton.style.setProperty('--marker-color', colors[index % colors.length]);
-    markerButton.innerHTML = `
-      <span class="marker-pin" aria-hidden="true">
-        <svg viewBox="0 0 48 60" focusable="false">
-          <path fill-rule="evenodd" d="M24 58C19.1 51.2 5 38.1 5 23.4 5 12.7 13.5 4 24 4s19 8.7 19 19.4C43 38.1 28.9 51.2 24 58Zm0-28.1a7 7 0 1 0 0-14 7 7 0 0 0 0 14Z"/>
-        </svg>
-      </span>`;
     markerButton.addEventListener('pointerenter', event => {
       if (event.pointerType === 'mouse') showPreview(location.id);
     });
@@ -303,11 +297,95 @@ function easeInOutCubic(value) {
   return value < .5 ? 4 * value * value * value : 1 - Math.pow(-2 * value + 2, 3) / 2;
 }
 
-function createMarkerVisual(location) {
+function createMarkerVisual(location, index) {
   const normal = latLngToVector(location.lat, location.lng).normalize();
+  let north = localUp.clone().sub(normal.clone().multiplyScalar(localUp.dot(normal)));
+  if (north.lengthSq() < .0001) north = new THREE.Vector3(0, 0, 1);
+  north.normalize();
+  const east = new THREE.Vector3().crossVectors(north, normal).normalize();
+  const markerAngle = THREE.MathUtils.degToRad(location.markerAngle || 0);
+  const bodyDirection = north.clone().multiplyScalar(Math.cos(markerAngle))
+    .add(east.clone().multiplyScalar(-Math.sin(markerAngle)))
+    .normalize();
+
+  const markerShape = new THREE.Shape();
+  markerShape.moveTo(0, 0);
+  markerShape.bezierCurveTo(-.012, .025, -.07, .076, -.07, .132);
+  markerShape.bezierCurveTo(-.07, .182, -.039, .21, 0, .21);
+  markerShape.bezierCurveTo(.039, .21, .07, .182, .07, .132);
+  markerShape.bezierCurveTo(.07, .076, .012, .025, 0, 0);
+  markerShape.closePath();
+  const markerHole = new THREE.Path();
+  markerHole.absellipse(0, .14, .021, .021, 0, Math.PI * 2, false, 0);
+  markerShape.holes.push(markerHole);
+
+  const pinGeometry = new THREE.ExtrudeGeometry(markerShape, {
+    depth: .028,
+    bevelEnabled: true,
+    bevelSegments: 2,
+    steps: 1,
+    bevelSize: .004,
+    bevelThickness: .004,
+    curveSegments: 24
+  });
+  pinGeometry.translate(0, 0, -.014);
+
+  const color = colors[index % colors.length];
+  const group = new THREE.Group();
+  const basis = new THREE.Matrix4().makeBasis(east, north, normal);
+  group.quaternion.setFromRotationMatrix(basis);
+  group.position.copy(normal).multiplyScalar(globeRadius);
+
+  const holder = new THREE.Group();
+  holder.rotation.z = markerAngle;
+  group.add(holder);
+
+  const pin = new THREE.Mesh(
+    pinGeometry,
+    new THREE.MeshStandardMaterial({
+      color,
+      emissive: color,
+      emissiveIntensity: .035,
+      metalness: 0,
+      roughness: .68
+    })
+  );
+  const markerTilt = THREE.MathUtils.degToRad(52);
+  pin.rotation.x = markerTilt;
+  pin.position.z = .012;
+  pin.castShadow = false;
+  holder.add(pin);
+
+  const base = new THREE.Mesh(
+    new THREE.SphereGeometry(.017, 18, 12),
+    new THREE.MeshStandardMaterial({ color, metalness: 0, roughness: .75 })
+  );
+  base.position.z = .01;
+  group.add(base);
+
+  const selectionRing = new THREE.Mesh(
+    new THREE.RingGeometry(.043, .061, 32),
+    new THREE.MeshBasicMaterial({
+      color,
+      transparent: true,
+      opacity: 0,
+      depthWrite: false,
+      side: THREE.DoubleSide
+    })
+  );
+  selectionRing.position.z = .006;
+  group.add(selectionRing);
+  state.globeGroup.add(group);
+
   markerVisuals.set(location.id, {
     normal,
-    anchor: normal.clone().multiplyScalar(globeRadius + .035)
+    bodyDirection,
+    group,
+    selectionRing,
+    markerTilt,
+    scale: 1,
+    lift: 0,
+    anchor: normal.clone().multiplyScalar(globeRadius + .12)
   });
 }
 
@@ -465,8 +543,18 @@ function updateMarkerPositions() {
 
     const active = state.selectedId === location.id;
     const hovered = state.hoveredId === location.id;
-    const lift = active ? .04 : hovered ? .022 : 0;
-    visual.anchor.copy(visual.normal).multiplyScalar(globeRadius + .035 + lift);
+    const targetLift = active ? .027 : hovered ? .014 : 0;
+    const targetScale = active ? 1.16 : hovered ? 1.09 : 1;
+    visual.lift += (targetLift - visual.lift) * .18;
+    visual.scale += (targetScale - visual.scale) * .18;
+    visual.group.position.copy(visual.normal).multiplyScalar(globeRadius + visual.lift);
+    visual.group.scale.setScalar(visual.scale);
+    visual.selectionRing.material.opacity += ((active ? .52 : hovered ? .32 : 0) - visual.selectionRing.material.opacity) * .2;
+
+    const bodyCenter = .116 * visual.scale;
+    visual.anchor.copy(visual.normal).multiplyScalar(
+      globeRadius + visual.lift + .012 + Math.sin(visual.markerTilt) * bodyCenter
+    ).addScaledVector(visual.bodyDirection, Math.cos(visual.markerTilt) * bodyCenter);
 
     worldPoint.copy(visual.anchor).applyQuaternion(state.globeGroup.quaternion);
     worldNormal.copy(visual.normal).applyQuaternion(state.globeGroup.quaternion).normalize();
@@ -475,6 +563,7 @@ function updateMarkerPositions() {
     const frontFacing = worldNormal.dot(towardCamera) > .08 && projected.z < 1;
     const onScreen = Math.abs(projected.x) < 1.02 && Math.abs(projected.y) < 1.02;
     const visible = frontFacing && onScreen;
+    visual.group.visible = frontFacing;
     const x = (projected.x * .5 + .5) * width;
     const y = (-projected.y * .5 + .5) * height;
 

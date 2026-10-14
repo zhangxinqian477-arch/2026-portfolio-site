@@ -35,6 +35,6 @@ portfolio-viewer.js 中 PDF URL 的 v 参数（建议使用新文件 SHA256 前 
 
 - `/field-notes/` 是“沿途记录 / Field Notes”的独立静态页面，本地草稿首页已增加入口，公开网站尚未更新。
 - 页面使用本地打包的 Three.js 和 Natural Earth 大陆轮廓，不依赖外部 CDN；支持拖动、慢速自转、地点聚焦、桌面侧栏和手机底部面板。
-- 地点内容集中在 `field-notes/data/locations.js`。当前城市为南京、深圳、青岛、西安；新增或替换城市时无需改动地球逻辑。
-- 真实照片按城市放进 `field-notes/assets/places/城市英文名/`。每个城市文件夹内已放置命名说明，后续统一压缩并接入页面。
-- 当前配套插画均为明确标注的 demo 内容。接入真实照片、日期和文字后，应移除页面中的 demo 提示。
+- 地点内容集中在 `field-notes/data/locations.js`。当前城市为南京、无锡、青岛、大同、西安、哈尔滨、深圳；新增或替换城市时无需改动地球逻辑。
+- 原始照片按城市保存在 `field-notes/assets/places/城市英文名/` 并由 `.gitignore` 排除；页面加载各城市 `web/` 文件夹中的轻量 WebP 版本。
+- 南京、无锡、青岛、大同、哈尔滨、深圳已接入真实旅行照片；西安暂时保留明确标注的 demo 内容，补图后再替换。

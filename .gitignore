@@ -1,0 +1,5 @@
+# Keep original Field Notes photos local. Commit only the optimized web assets.
+field-notes/assets/places/*/*.jpg
+field-notes/assets/places/*/*.jpeg
+field-notes/assets/places/*/*.png
+field-notes/assets/places/*/*.heic
