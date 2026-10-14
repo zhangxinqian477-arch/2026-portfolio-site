@@ -63,6 +63,8 @@ const state = {
 const colors = ['#d97957', '#e7c96d', '#4e73a6'];
 const globeRadius = 1.08;
 const localUp = new THREE.Vector3(0, 1, 0);
+const markerGray = '#a5adaa';
+const markerTextureCache = new Map();
 
 function createLocationControls() {
   elements.placeCount.textContent = String(locations.length).padStart(2, '0');
@@ -297,6 +299,52 @@ function easeInOutCubic(value) {
   return value < .5 ? 4 * value * value * value : 1 - Math.pow(-2 * value + 2, 3) / 2;
 }
 
+function getMarkerTexture(bodyColor, centerColor) {
+  const key = `${bodyColor}-${centerColor}`;
+  if (markerTextureCache.has(key)) return markerTextureCache.get(key);
+
+  const canvas = document.createElement('canvas');
+  canvas.width = 160;
+  canvas.height = 208;
+  const context = canvas.getContext('2d');
+  context.clearRect(0, 0, canvas.width, canvas.height);
+
+  const drawPin = (offsetX, offsetY, fill) => {
+    context.beginPath();
+    context.moveTo(80 + offsetX, 196 + offsetY);
+    context.bezierCurveTo(70 + offsetX, 178 + offsetY, 25 + offsetX, 137 + offsetY, 25 + offsetX, 82 + offsetY);
+    context.bezierCurveTo(25 + offsetX, 48 + offsetY, 49 + offsetX, 22 + offsetY, 80 + offsetX, 22 + offsetY);
+    context.bezierCurveTo(111 + offsetX, 22 + offsetY, 135 + offsetX, 48 + offsetY, 135 + offsetX, 82 + offsetY);
+    context.bezierCurveTo(135 + offsetX, 137 + offsetY, 90 + offsetX, 178 + offsetY, 80 + offsetX, 196 + offsetY);
+    context.closePath();
+    context.fillStyle = fill;
+    context.fill();
+  };
+
+  drawPin(4, 7, 'rgba(65, 75, 74, .2)');
+  drawPin(0, 0, bodyColor);
+
+  context.beginPath();
+  context.arc(80, 80, 22, 0, Math.PI * 2);
+  context.fillStyle = centerColor;
+  context.fill();
+
+  context.beginPath();
+  context.arc(64, 55, 17, Math.PI * 1.05, Math.PI * 1.65);
+  context.strokeStyle = 'rgba(255, 255, 255, .28)';
+  context.lineWidth = 7;
+  context.lineCap = 'round';
+  context.stroke();
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+  texture.generateMipmaps = false;
+  markerTextureCache.set(key, texture);
+  return texture;
+}
+
 function createMarkerVisual(location, index) {
   const normal = latLngToVector(location.lat, location.lng).normalize();
   let north = localUp.clone().sub(normal.clone().multiplyScalar(localUp.dot(normal)));
@@ -308,85 +356,75 @@ function createMarkerVisual(location, index) {
     .add(east.clone().multiplyScalar(-Math.sin(markerAngle)))
     .normalize();
 
-  const markerShape = new THREE.Shape();
-  markerShape.moveTo(0, 0);
-  markerShape.bezierCurveTo(-.012, .025, -.07, .076, -.07, .132);
-  markerShape.bezierCurveTo(-.07, .182, -.039, .21, 0, .21);
-  markerShape.bezierCurveTo(.039, .21, .07, .182, .07, .132);
-  markerShape.bezierCurveTo(.07, .076, .012, .025, 0, 0);
-  markerShape.closePath();
-  const markerHole = new THREE.Path();
-  markerHole.absellipse(0, .14, .021, .021, 0, Math.PI * 2, false, 0);
-  markerShape.holes.push(markerHole);
-
-  const pinGeometry = new THREE.ExtrudeGeometry(markerShape, {
-    depth: .028,
-    bevelEnabled: true,
-    bevelSegments: 2,
-    steps: 1,
-    bevelSize: .004,
-    bevelThickness: .004,
-    curveSegments: 24
-  });
-  pinGeometry.translate(0, 0, -.014);
-
   const color = colors[index % colors.length];
-  const group = new THREE.Group();
+  const accentCenter = new THREE.Color(color)
+    .lerp(new THREE.Color('#fff5dd'), .58)
+    .getStyle();
+  const defaultTexture = getMarkerTexture(markerGray, '#e5e8e5');
+  const accentTexture = getMarkerTexture(color, accentCenter);
+
+  const baseGroup = new THREE.Group();
   const basis = new THREE.Matrix4().makeBasis(east, north, normal);
-  group.quaternion.setFromRotationMatrix(basis);
-  group.position.copy(normal).multiplyScalar(globeRadius);
-
-  const holder = new THREE.Group();
-  holder.rotation.z = markerAngle;
-  group.add(holder);
-
-  const pin = new THREE.Mesh(
-    pinGeometry,
-    new THREE.MeshStandardMaterial({
-      color,
-      emissive: color,
-      emissiveIntensity: .035,
-      metalness: 0,
-      roughness: .68
-    })
-  );
-  const markerTilt = THREE.MathUtils.degToRad(52);
-  pin.rotation.x = markerTilt;
-  pin.position.z = .012;
-  pin.castShadow = false;
-  holder.add(pin);
-
-  const base = new THREE.Mesh(
-    new THREE.SphereGeometry(.017, 18, 12),
-    new THREE.MeshStandardMaterial({ color, metalness: 0, roughness: .75 })
-  );
-  base.position.z = .01;
-  group.add(base);
+  baseGroup.quaternion.setFromRotationMatrix(basis);
+  baseGroup.position.copy(normal).multiplyScalar(globeRadius + .003);
 
   const selectionRing = new THREE.Mesh(
-    new THREE.RingGeometry(.043, .061, 32),
+    new THREE.RingGeometry(.018, .029, 28),
     new THREE.MeshBasicMaterial({
-      color,
+      color: markerGray,
       transparent: true,
-      opacity: 0,
+      opacity: .22,
       depthWrite: false,
       side: THREE.DoubleSide
     })
   );
-  selectionRing.position.z = .006;
-  group.add(selectionRing);
-  group.scale.setScalar(.58);
-  state.globeGroup.add(group);
+  selectionRing.position.z = .004;
+  baseGroup.add(selectionRing);
+  state.globeGroup.add(baseGroup);
+
+  const surfacePoint = normal.clone().multiplyScalar(globeRadius + .009);
+  const displayPoint = normal.clone().multiplyScalar(globeRadius + .026)
+    .addScaledVector(bodyDirection, .052);
+  const leaderGeometry = new THREE.BufferGeometry().setFromPoints([surfacePoint, displayPoint]);
+  const leader = new THREE.Line(
+    leaderGeometry,
+    new THREE.LineBasicMaterial({
+      color: markerGray,
+      transparent: true,
+      opacity: .38,
+      depthWrite: false
+    })
+  );
+  leader.renderOrder = 3;
+  state.globeGroup.add(leader);
+
+  const sprite = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: defaultTexture,
+    transparent: true,
+    depthTest: false,
+    depthWrite: false,
+    toneMapped: false
+  }));
+  sprite.center.set(.5, .05);
+  sprite.position.copy(displayPoint);
+  sprite.scale.set(.105, .142, 1);
+  sprite.renderOrder = 5;
+  state.globeGroup.add(sprite);
 
   markerVisuals.set(location.id, {
     normal,
     bodyDirection,
-    group,
+    baseGroup,
+    leader,
+    sprite,
     selectionRing,
-    markerTilt,
-    scale: .58,
+    color,
+    defaultTexture,
+    accentTexture,
+    emphasized: false,
+    scale: 1,
     lift: 0,
-    anchor: normal.clone().multiplyScalar(globeRadius + .12)
+    anchor: displayPoint.clone()
   });
 }
 
@@ -544,18 +582,31 @@ function updateMarkerPositions() {
 
     const active = state.selectedId === location.id;
     const hovered = state.hoveredId === location.id;
+    const emphasized = active || hovered;
     const targetLift = active ? .012 : hovered ? .006 : 0;
-    const targetScale = active ? .72 : hovered ? .64 : .58;
+    const targetScale = active ? 1.12 : hovered ? 1.07 : 1;
     visual.lift += (targetLift - visual.lift) * .18;
     visual.scale += (targetScale - visual.scale) * .18;
-    visual.group.position.copy(visual.normal).multiplyScalar(globeRadius + visual.lift);
-    visual.group.scale.setScalar(visual.scale);
-    visual.selectionRing.material.opacity += ((active ? .52 : hovered ? .32 : 0) - visual.selectionRing.material.opacity) * .2;
+    visual.anchor.copy(visual.normal)
+      .multiplyScalar(globeRadius + .026 + visual.lift)
+      .addScaledVector(visual.bodyDirection, .052);
+    visual.sprite.position.copy(visual.anchor);
+    visual.sprite.scale.set(.105 * visual.scale, .142 * visual.scale, 1);
+    visual.selectionRing.material.opacity += ((active ? .62 : hovered ? .44 : .22) - visual.selectionRing.material.opacity) * .2;
+    visual.selectionRing.material.color.set(emphasized ? visual.color : markerGray);
+    visual.leader.material.color.set(emphasized ? visual.color : markerGray);
+    visual.leader.material.opacity = emphasized ? .62 : .38;
+    if (visual.emphasized !== emphasized) {
+      visual.sprite.material.map = emphasized ? visual.accentTexture : visual.defaultTexture;
+      visual.sprite.material.needsUpdate = true;
+      visual.emphasized = emphasized;
+    }
 
-    const bodyCenter = .116 * visual.scale;
-    visual.anchor.copy(visual.normal).multiplyScalar(
-      globeRadius + visual.lift + .012 + Math.sin(visual.markerTilt) * bodyCenter
-    ).addScaledVector(visual.bodyDirection, Math.cos(visual.markerTilt) * bodyCenter);
+    const leaderPositions = visual.leader.geometry.attributes.position;
+    const surfacePoint = visual.normal.clone().multiplyScalar(globeRadius + .009);
+    leaderPositions.setXYZ(0, surfacePoint.x, surfacePoint.y, surfacePoint.z);
+    leaderPositions.setXYZ(1, visual.anchor.x, visual.anchor.y, visual.anchor.z);
+    leaderPositions.needsUpdate = true;
 
     worldPoint.copy(visual.anchor).applyQuaternion(state.globeGroup.quaternion);
     worldNormal.copy(visual.normal).applyQuaternion(state.globeGroup.quaternion).normalize();
@@ -564,9 +615,11 @@ function updateMarkerPositions() {
     const frontFacing = worldNormal.dot(towardCamera) > .08 && projected.z < 1;
     const onScreen = Math.abs(projected.x) < 1.02 && Math.abs(projected.y) < 1.02;
     const visible = frontFacing && onScreen;
-    visual.group.visible = frontFacing;
+    visual.baseGroup.visible = frontFacing;
+    visual.leader.visible = frontFacing;
+    visual.sprite.visible = frontFacing;
     const x = (projected.x * .5 + .5) * width;
-    const y = (-projected.y * .5 + .5) * height;
+    const y = (-projected.y * .5 + .5) * height - 17;
 
     markerScreenPositions.set(location.id, { x, y, visible });
     button.style.left = `${x}px`;
