@@ -3,5 +3,5 @@ window.PORTAL_CONFIG = Object.freeze({
   portfolioUrl: "./portfolio.html",
   resumeUrl: "./resume.html",
   fieldNotesUrl: "./field-notes/",
-  email: ""
+  email: "xinqian_zhang@163.com"
 });

@@ -217,7 +217,7 @@ function showPreview(id, source = 'marker', delay = 130) {
   elements.polaroidMeta.textContent = location.previewMeta;
   state.previewTimer = window.setTimeout(() => {
     if (state.hoveredId !== id || state.hoverSource !== source) return;
-    if (!markerScreenPositions.get(id)?.visible) return;
+    if (!markerScreenPositions.get(id)?.previewVisible) return;
     positionPreview(id);
     requestAnimationFrame(() => {
       elements.polaroid.classList.add('is-visible');
@@ -596,8 +596,13 @@ async function initGlobe() {
     state.webglReady = true;
     attachGlobeInteraction();
     observeGlobeSize();
+    updateMarkerPositions(performance.now());
+    state.renderer.render(state.scene, state.camera);
     state.animationFrame = requestAnimationFrame(renderFrame);
-    startOnboarding();
+    requestAnimationFrame(() => {
+      elements.globeWrap.classList.add('is-ready');
+      window.setTimeout(startOnboarding, 220);
+    });
   } catch (error) {
     console.error('Field Notes globe could not be initialized.', error);
     showGlobeFallback();
@@ -763,11 +768,13 @@ function updateMarkerPositions(now) {
     towardCamera.copy(state.camera.position).sub(worldPoint).normalize();
     projected.copy(worldPoint).project(state.camera);
     const facing = worldNormal.dot(towardCamera);
-    const edgeOpacity = THREE.MathUtils.smoothstep(facing, -.04, .22);
-    const frontFacing = facing > -.04 && projected.z < 1;
+    const edgeOpacity = THREE.MathUtils.smoothstep(facing, .1, .4);
+    const frontFacing = facing > .1 && projected.z < 1;
     const onScreen = Math.abs(projected.x) < 1.02 && Math.abs(projected.y) < 1.02;
     const visible = frontFacing && onScreen;
-    const interactive = facing > .045 && onScreen;
+    const interactive = facing > .24 && onScreen;
+    const labelVisible = facing > .34 && onScreen;
+    const previewVisible = facing > .44 && onScreen;
     visual.marker.visible = visible;
     visual.headMaterial.opacity = visual.opacity * edgeOpacity;
     visual.stemMaterial.opacity = visual.opacity * edgeOpacity;
@@ -776,11 +783,12 @@ function updateMarkerPositions(now) {
     const x = (projected.x * .5 + .5) * width;
     const y = (-projected.y * .5 + .5) * height;
 
-    markerScreenPositions.set(location.id, { x, y, visible: interactive });
+    markerScreenPositions.set(location.id, { x, y, visible: interactive, labelVisible, previewVisible });
     button.style.left = `${x}px`;
     button.style.top = `${y}px`;
     button.classList.toggle('is-visible', interactive);
     button.classList.toggle('is-linked', hovered);
+    button.classList.toggle('is-label-visible', labelVisible);
     button.classList.toggle('label-left', x > width * .68);
     button.setAttribute('aria-hidden', String(!interactive));
     button.tabIndex = interactive ? 0 : -1;
@@ -789,7 +797,7 @@ function updateMarkerPositions(now) {
 
   if (state.hoveredId && (state.hoverSource === 'marker' || state.hoverSource === 'selected')) {
     const point = markerScreenPositions.get(state.hoveredId);
-    if (!point?.visible) {
+    if (!point?.previewVisible) {
       if (state.hoverSource === 'marker') hidePreview(state.hoveredId);
       else {
         elements.polaroid.classList.remove('is-visible');
@@ -844,6 +852,7 @@ function showGlobeFallback() {
   elements.canvas.hidden = true;
   elements.markerLayer.hidden = true;
   elements.fallback.hidden = false;
+  requestAnimationFrame(() => elements.globeWrap.classList.add('is-ready'));
 }
 
 function handleMotionPreference() {

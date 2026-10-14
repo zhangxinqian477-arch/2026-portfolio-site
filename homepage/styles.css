@@ -42,7 +42,7 @@ footer{display:flex;justify-content:center;align-items:center;gap:7px;margin-top
 .point-two{fill:#f7f1d7}
 .map-pin path{fill:none;stroke:#d47c5d;stroke-linecap:round;stroke-width:1.8}
 .map-pin circle{fill:#f5b284;stroke:#587f9d;stroke-width:1.4;transform-box:fill-box;transform-origin:center;transition:transform 300ms cubic-bezier(.2,.8,.25,1)}
-.travel-photo{height:58px;position:absolute;right:18px;top:-13px;transform:rotate(3deg);transition:transform 300ms cubic-bezier(.2,.8,.25,1);width:70px;z-index:1}
+.travel-photo{height:58px;position:absolute;right:18px;top:-23px;transform:rotate(3deg);transition:transform 300ms cubic-bezier(.2,.8,.25,1);width:70px;z-index:1}
 .travel-photo svg{height:100%;overflow:visible;width:100%}
 .travel-photo rect{fill:#fffdf6;stroke:#94a6a4;stroke-width:1}
 .travel-photo .photo-sky{fill:#bfe2df;stroke:none}
@@ -52,7 +52,7 @@ footer{display:flex;justify-content:center;align-items:center;gap:7px;margin-top
 .field-notes-label strong,.field-notes-label span{display:block}
 .field-notes-label strong{color:#40555b;font-family:var(--font-cjk);font-size:17px;font-weight:500;letter-spacing:.02em;line-height:1.5}
 .field-notes-label span{color:#627b81;font-family:var(--font-latin);font-size:12.5px;font-weight:400;letter-spacing:.02em;margin-top:1px}
-.field-notes-caption{align-items:center;color:#8a9593;display:flex;font-family:var(--font-latin);font-size:11px;justify-content:space-between;letter-spacing:.02em;margin:6px 10px 0;min-height:20px;transition:color 250ms ease}
+.field-notes-caption{align-items:center;color:#8a9593;display:flex;font-family:var(--font-cjk);font-size:11px;justify-content:space-between;letter-spacing:.02em;margin:6px 10px 0;min-height:20px;transition:color 250ms ease}
 .folder-caption{min-height:20px}
 .field-notes-caption span:last-child{font-family:var(--font-latin);font-size:17px;line-height:1}
 .field-notes-entry:active .field-notes-art{transform:translateY(-2px) scale(.985)}
