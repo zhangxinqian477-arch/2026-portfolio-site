@@ -162,7 +162,7 @@
     [['.intro h1',1400,450],['.description',1740,400],['.english',1900,350]].forEach(([selector,delay,duration])=>animate(document.querySelector(selector),[
       {opacity:0,translate:'0 10px'},{opacity:1,translate:'0 0'}
     ],{duration,delay,easing:'cubic-bezier(.2,.7,.3,1)'}));
-    [['.resume',2000],['.portfolio',2080],['.field-notes-entry',2320]].forEach(([selector,delay])=>animate(document.querySelector(selector),[
+    [['.portfolio',2000],['.resume',2080],['.field-notes-entry',2320]].forEach(([selector,delay])=>animate(document.querySelector(selector),[
       {opacity:0,translate:'0 12px'},
       {opacity:1,translate:'0 4px',offset:.38},
       {opacity:1,translate:'0 0'}

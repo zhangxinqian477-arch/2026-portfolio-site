@@ -152,6 +152,7 @@ function createLocationControls() {
 
 function setLinkedLocation(id, source) {
   if (!locationById.has(id)) return;
+  if (state.selectedId && source !== 'selected') return;
   dismissFeatured();
   state.hoveredId = id;
   state.hoverSource = source;
@@ -171,26 +172,29 @@ function clearLinkedLocation(id, source = null) {
   elements.previewConnector.classList.remove('is-visible');
 }
 
-function showPreview(id) {
+function showPreview(id, source = 'marker', delay = 130) {
   if (!locationById.has(id)) return;
   window.clearTimeout(state.previewTimer);
-  setLinkedLocation(id, 'marker');
+  setLinkedLocation(id, source);
+  if (state.hoveredId !== id || state.hoverSource !== source) return;
   if (compactLayout.matches) return;
   elements.polaroid.classList.remove('is-visible');
+  elements.previewConnector.classList.remove('is-visible');
+  const location = locationById.get(id);
+  elements.polaroidImage.src = location.cover;
+  elements.polaroidImage.alt = location.coverAlt;
+  elements.polaroidCity.textContent = `${location.city} · ${location.cityEn}`;
+  elements.polaroidMeta.textContent = location.previewMeta;
   state.previewTimer = window.setTimeout(() => {
-    if (state.hoveredId !== id || state.hoverSource !== 'marker') return;
-    const location = locationById.get(id);
-    elements.polaroidImage.src = location.cover;
-    elements.polaroidImage.alt = location.coverAlt;
-    elements.polaroidCity.textContent = `${location.city} · ${location.cityEn}`;
-    elements.polaroidMeta.textContent = location.previewMeta;
+    if (state.hoveredId !== id || state.hoverSource !== source) return;
+    if (!markerScreenPositions.get(id)?.visible) return;
     positionPreview(id);
     requestAnimationFrame(() => {
       elements.polaroid.classList.add('is-visible');
       elements.previewConnector.classList.add('is-visible');
     });
     state.previewTimer = 0;
-  }, 130);
+  }, delay);
 }
 
 function hidePreview(id) {
@@ -224,8 +228,8 @@ function positionPreview(id) {
   const distance = 154;
   let previewX = point.x + directionX * distance;
   let previewY = point.y + directionY * distance;
-  const viewportMinX = 12 - wrapBounds.left + halfWidth;
-  const viewportMaxX = window.innerWidth - 12 - wrapBounds.left - halfWidth;
+  const viewportMinX = Math.max(12 + halfWidth, 12 - wrapBounds.left + halfWidth);
+  const viewportMaxX = Math.min(width - 12 - halfWidth, window.innerWidth - 12 - wrapBounds.left - halfWidth);
   const viewportMinY = 12 - wrapBounds.top + halfHeight;
   const viewportMaxY = window.innerHeight - 12 - wrapBounds.top - halfHeight;
 
@@ -316,6 +320,7 @@ function selectLocation(location, trigger, keyboardSelection = false) {
   renderDetail(location);
   updateSelectionStates();
   focusGlobe(location, reducedMotion.matches ? 90 : 780);
+  showPreview(location.id, 'selected', 0);
 
   elements.panel.inert = false;
   elements.panel.setAttribute('aria-hidden', 'false');
@@ -332,6 +337,7 @@ function closePanel({ restoreFocus = true } = {}) {
   window.clearTimeout(state.panelTimer);
   document.body.classList.remove('panel-open');
   const trigger = state.lastTrigger;
+  clearLinkedLocation(state.selectedId, 'selected');
   state.selectedId = null;
   state.lastTrigger = null;
   state.focusAnimation = null;
@@ -627,6 +633,7 @@ function attachGlobeInteraction() {
     if (event.target.closest?.('#featuredNote')) return;
     const markerId = nearestMarkerAt(event.clientX, event.clientY);
     elements.globeWrap.classList.toggle('marker-hover', Boolean(markerId));
+    if (state.selectedId) return;
     if (markerId === state.hoveredId && state.hoverSource === 'marker') return;
     if (state.hoverSource === 'marker') hidePreview(state.hoveredId);
     if (markerId) showPreview(markerId);
@@ -762,10 +769,21 @@ function updateMarkerPositions(now) {
 
   });
 
-  if (state.hoveredId && state.hoverSource === 'marker') {
+  if (state.hoveredId && (state.hoverSource === 'marker' || state.hoverSource === 'selected')) {
     const point = markerScreenPositions.get(state.hoveredId);
-    if (!point?.visible) hidePreview(state.hoveredId);
-    else positionPreview(state.hoveredId);
+    if (!point?.visible) {
+      if (state.hoverSource === 'marker') hidePreview(state.hoveredId);
+      else {
+        elements.polaroid.classList.remove('is-visible');
+        elements.previewConnector.classList.remove('is-visible');
+      }
+    } else {
+      positionPreview(state.hoveredId);
+      if (state.hoverSource === 'selected') {
+        elements.polaroid.classList.add('is-visible');
+        elements.previewConnector.classList.add('is-visible');
+      }
+    }
   }
 }
 
