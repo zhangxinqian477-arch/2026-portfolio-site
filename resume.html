@@ -1,24 +1,63 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>张新倩 - 个人简历</title>
+  <meta name="description" content="张新倩的个人简历，聚焦产品体验、交互设计与 AI 产品设计。">
+  <meta name="theme-color" content="#ffffff">
+  <title>简历 · 张新倩</title>
   <link rel="icon" href="homepage/assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="reader-shell.css?v=1">
-  <script src="portfolio-viewer.js?v=4" defer></script>
+  <link rel="stylesheet" href="resume/styles.css">
+  <script type="module" src="resume/page.js"></script>
 </head>
-<body data-document="resume">
-  <header class="reader-bar">
-    <a class="reader-back" href="./index.html" aria-label="返回首页"><span aria-hidden="true">←</span>返回首页</a>
-    <span class="reader-title">张新倩 · 简历</span>
-  </header>
-  <div class="loading" id="loading" role="status">
-    <div class="spinner" id="spinner" aria-hidden="true"></div>
-    <div id="loading-message">简历加载中，请稍候…</div>
-    <a href="resume.pdf?v=a75e65745cf1" target="_blank" rel="noopener">直接打开 PDF</a>
+<body>
+  <div class="resume">
+    <header class="masthead">
+      <a class="wordmark" href="./index.html">XINQIAN ZHANG</a>
+      <nav aria-label="网站导航">
+        <a href="./index.html">首页</a>
+        <a href="./portfolio.html">作品集 <img src="resume/assets/arrow.svg" width="14" height="14" alt=""></a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="profile" id="profile"></div>
+
+      <section class="experience" aria-labelledby="experience-heading" data-active-experience="gamehaus">
+        <h2 id="experience-heading">02 / 实习经历</h2>
+        <div class="timeline" role="group" aria-label="切换实习经历"></div>
+        <div class="experience-cards"></div>
+        <p class="visually-hidden" id="experience-status" role="status"></p>
+      </section>
+
+      <section class="ruled-section" aria-labelledby="campus-heading">
+        <h2 id="campus-heading">03 / 校园经历</h2>
+        <div id="campus"></div>
+      </section>
+
+      <section class="about" aria-labelledby="about-heading">
+        <header class="about-heading">
+          <h2 id="about-heading">04 / 关于我</h2>
+          <span lang="en">VISUAL ARCHIVE · 01–10</span>
+        </header>
+        <div id="about-gallery" class="about-gallery">
+          <div class="about-copy">
+            <div id="about-introduction" class="about-introduction"></div>
+            <ul id="about-interests" class="about-interests" aria-label="个人兴趣"></ul>
+          </div>
+        </div>
+        <dialog class="archive-lightbox" aria-labelledby="archive-lightbox-caption">
+          <form method="dialog">
+            <button type="submit" aria-label="关闭大图" autofocus>×</button>
+          </form>
+          <figure>
+            <figcaption id="archive-lightbox-caption"></figcaption>
+          </figure>
+        </dialog>
+      </section>
+
+      <noscript><p>启用 JavaScript 后即可查看交互式简历。</p></noscript>
+    </main>
   </div>
-  <iframe id="portfolio" title="张新倩简历" data-pdf="resume.pdf?v=a75e65745cf1" allow="fullscreen"></iframe>
-  <noscript><style>#spinner { display: none; }</style>请使用上方链接打开文档。</noscript>
 </body>
 </html>
