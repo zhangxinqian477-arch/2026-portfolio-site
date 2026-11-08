@@ -32,6 +32,8 @@ footer{display:flex;justify-content:center;align-items:center;gap:7px;margin-top
 .destinations{align-items:flex-end;flex-direction:row;gap:64px;width:100%}
 .primary-destinations{display:flex;gap:32px;justify-content:center}
 .folder-art{height:auto;aspect-ratio:300/206}
+.folder-back,.folder-cover>svg{stroke-linejoin:miter}
+.folder .paper{border-radius:0}
 .field-notes-entry{color:#65747a;display:block;flex:0 0 auto;margin:16px 0 0;position:relative;touch-action:manipulation;width:210px}
 .field-notes-art{height:138px;position:relative;transition:transform 300ms cubic-bezier(.2,.75,.25,1);width:100%}
 .travel-map{height:100%;inset:0;overflow:visible;position:absolute;width:100%;z-index:2}
