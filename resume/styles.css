@@ -89,6 +89,9 @@ h4, .card-role { font: var(--type-emphasis); }
 .portrait { display: block; width: min(100%, 204px); height: auto; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 4px; }
 
 .experience {
+  --small-track: 260;
+  --large-track: 648;
+  --total-tracks: calc(3 * var(--small-track) + var(--large-track));
   --small: minmax(0, 260fr);
   --large: minmax(0, 648fr);
   --card-gap: 24px;
@@ -97,20 +100,29 @@ h4, .card-role { font: var(--type-emphasis); }
   overflow-anchor: none;
   margin-block-start: clamp(10px, 1.5vw, 20px);
 }
+[data-active-experience="meituan"] {
+  --experience-columns: var(--large) var(--small) var(--small) var(--small);
+  --timeline-fill: 0%;
+  --gamehaus-anchor: calc(var(--second-card-start) + var(--expanded-offset));
+  --vivix-anchor: calc(var(--third-card-start) + var(--expanded-offset));
+}
 [data-active-experience="gamehaus"] {
-  --experience-columns: var(--large) var(--small) var(--small);
-  --timeline-progress: 0;
-  --middle-anchor: calc((100% - 2 * var(--card-gap)) * 648 / 1168 + var(--card-gap));
+  --experience-columns: var(--small) var(--large) var(--small) var(--small);
+  --timeline-fill: 37.5%;
+  --gamehaus-anchor: calc(var(--second-card-start) + var(--large-width) / 2);
+  --vivix-anchor: calc(var(--third-card-start) + var(--expanded-offset));
 }
 [data-active-experience="vivix"] {
-  --experience-columns: var(--small) var(--large) var(--small);
-  --timeline-progress: .5;
-  --middle-anchor: 50%;
+  --experience-columns: var(--small) var(--small) var(--large) var(--small);
+  --timeline-fill: 62.5%;
+  --gamehaus-anchor: var(--second-card-start);
+  --vivix-anchor: calc(var(--third-card-start) + var(--large-width) / 2);
 }
 [data-active-experience="institute"] {
-  --experience-columns: var(--small) var(--small) var(--large);
-  --timeline-progress: 1;
-  --middle-anchor: calc((100% - 2 * var(--card-gap)) * 260 / 1168 + var(--card-gap));
+  --experience-columns: var(--small) var(--small) var(--small) var(--large);
+  --timeline-fill: 100%;
+  --gamehaus-anchor: var(--second-card-start);
+  --vivix-anchor: var(--third-card-start);
 }
 
 .experience-cards {
@@ -132,7 +144,7 @@ h4, .card-role { font: var(--type-emphasis); }
 .timeline {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   margin-block: 14px 12px;
 }
 .timeline::before, .timeline::after {
@@ -147,17 +159,18 @@ h4, .card-role { font: var(--type-emphasis); }
 .timeline::before { background: #d2e1ec; }
 .timeline::after {
   background: var(--blue);
-  transform: scaleX(var(--timeline-progress));
-  transform-origin: left;
-  transition: transform var(--motion);
+  inset-inline-end: auto;
+  inline-size: var(--timeline-fill);
+  transition: inline-size var(--motion);
 }
 .timeline-step { display: grid; justify-items: center; min-width: 0; }
 .timeline-step:first-child { justify-items: start; }
-.timeline-step:last-child { grid-column: 3; justify-items: end; }
+.timeline-step:last-child { grid-column: -2; justify-items: end; }
 .timeline-node {
   position: relative;
   z-index: 1;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   justify-items: center;
   align-content: start;
   gap: 1px;
@@ -188,7 +201,7 @@ h4, .card-role { font: var(--type-emphasis); }
 
 .experience-card {
   --card-padding: clamp(9px, 1vw, 14px);
-  --card-track: 260;
+  --card-track: var(--small-track);
   position: relative;
   min-width: 0;
   padding: 17px var(--card-padding) 20px;
@@ -199,7 +212,7 @@ h4, .card-role { font: var(--type-emphasis); }
 }
 .experience-card[data-selected="true"] {
   --card-padding: 26px;
-  --card-track: 648;
+  --card-track: var(--large-track);
   padding-block: 22px 26px;
   border-color: transparent;
   border-radius: 4px 11px 6px 9px / 6px 8px 9px 4px;
@@ -370,21 +383,32 @@ h4, .card-role { font: var(--type-emphasis); }
 }
 
 @media (min-width: 900px) {
+  .experience {
+    --card-space: calc(100% - 3 * var(--card-gap));
+    --small-width: calc(var(--card-space) * var(--small-track) / var(--total-tracks));
+    --large-width: calc(var(--card-space) * var(--large-track) / var(--total-tracks));
+    --expanded-offset: calc(var(--large-width) - var(--small-width));
+    --second-card-start: calc(var(--small-width) + var(--card-gap));
+    --third-card-start: calc(2 * var(--second-card-start));
+  }
+  [data-active-experience="gamehaus"] { --timeline-fill: var(--gamehaus-anchor); }
+  [data-active-experience="vivix"] { --timeline-fill: var(--vivix-anchor); }
   .timeline-step:is(:first-child, :last-child) .timeline-node { width: 112px; }
 
   /* Position from the track itself so the anchor takes one direct path while cards resize. */
-  .timeline-step:nth-child(2) {
+  .timeline-step:not(:first-child, :last-child) {
     position: absolute;
     top: 0;
-    inset-inline-start: var(--middle-anchor);
     width: 144px;
     transform: translateX(-50%);
     transition: inset-inline-start var(--motion);
   }
+  .timeline-step:nth-child(2) { inset-inline-start: var(--gamehaus-anchor); }
+  .timeline-step:nth-child(3) { inset-inline-start: var(--vivix-anchor); }
 
-  /* Keep line breaks stable while both grids move to their destination widths. */
+  /* Keep line breaks stable as cards move to their destination widths. */
   .card-content {
-    width: calc((100cqi - 2 * var(--card-gap)) * var(--card-track) / 1168 - 2 * var(--card-padding));
+    width: calc((100cqi - 3 * var(--card-gap)) * var(--card-track) / var(--total-tracks) - 2 * var(--card-padding));
   }
 }
 
@@ -427,7 +451,7 @@ h4, .card-role { font: var(--type-emphasis); }
   .contact { grid-template-columns: minmax(0, 1fr) minmax(70px, 30%); gap: 12px; align-items: center; }
   .contact address { gap: 8px; }
   .contact a { min-height: 30px; }
-  .timeline-node { font: var(--type-meta); }
+  .timeline-node { font: var(--type-meta); overflow-wrap: anywhere; }
   .campus-heading { grid-template-columns: 1fr; gap: 4px; }
   .project h4 { grid-template-columns: 1fr; gap: 3px; }
   .about { margin-top: 6px; padding-top: 24px; }

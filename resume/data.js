@@ -22,6 +22,19 @@ export const profile = {
 
 export const experiences = [
   {
+    id: 'meituan',
+    company: '美团',
+    label: '美团',
+    period: '2026.11—至今',
+    role: 'AI 产品体验设计实习生',
+    product: '美团平台',
+    summary: '参与平台 AI 产品的体验设计与原型验证，探索 AI 生成界面与 Design System 的结合。',
+    details: [
+      { label: 'AI 产品体验设计', text: '参与平台 AI 产品的需求分析与体验设计，围绕 AI 原生交互、复杂工作流与生成结果体验，协助完成产品方案与原型验证。' },
+      { label: 'AI 设计工具探索', text: '参与 AI 生成界面与 Design System 结合相关探索，关注生成结果评测、设计规范适配及 AI Coding 在设计交付中的应用。' },
+    ],
+  },
+  {
     id: 'gamehaus',
     company: 'Gamehaus',
     label: 'Gamehaus',
